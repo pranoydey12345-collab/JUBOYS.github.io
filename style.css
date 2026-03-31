@@ -1,0 +1,413 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  background: url("images/b.jpeg") no-repeat center;
+  background-size: cover;
+  text-align: center;
+  color: #fff;
+}
+
+/* HEADER */
+header {
+  padding: 15px 10px;
+   display: flex;              /* 🔥 important */
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, rgba(43,88,118,0.8), rgba(78,67,118,0.8));
+  backdrop-filter: blur(10px);
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+.nav-logo {
+  display: flex;
+  align-items: center;   /* 🔥 aligns logo + text vertically */
+  gap: 12px;
+  text-decoration: none;
+}
+
+/* keep text stacked */
+.brand-text {
+  display: flex;
+  flex-direction: column;   /* 🔥 name + tagline one below another */
+  justify-content: center;
+}
+
+/* brand name */
+.brand-name {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: white;
+}
+
+/* tagline */
+.brand-tagline {
+  font-size: 20px;
+  opacity: 0.7;
+}
+.nav-logo img {
+  height: 100px;   /* balanced with text */
+}
+/* HEADER BUTTONS (🔥 NEW DESIGN) */
+header .filters {
+  margin-top: 25px;
+}
+
+header .filters button {
+  padding: 18px 35px;         /* bigger */
+  margin: 10px;
+  border: none;
+
+  background: linear-gradient(135deg, #4e4376, #2b5876);
+  color: white;
+
+  font-size: 18px;
+  font-weight: 600;
+
+  border-radius: 50px;        /* pill shape */
+  cursor: pointer;
+
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+}
+
+/* HOVER EFFECT */
+header .filters button:hover {
+  transform: translateY(-3px) scale(1.08);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  background: linear-gradient(135deg, #ff7e5f, #feb47b);
+}
+
+header .filters button {
+  padding: 22px 45px;   /* 🔥 increased size */
+  margin: 12px;
+
+  font-size: 20px;      /* 🔥 bigger text */
+  font-weight: 700;
+
+  border-radius: 60px;  /* slightly more rounded */
+}
+}
+
+/* FILTER BUTTONS */
+.filters {
+  margin: 30px;
+}
+
+.filters button {
+  padding: 12px 25px;
+  background: linear-gradient(135deg, #ff7e5f, #feb47b);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+/* ACTIVE BUTTON */
+.filters button.active {
+  background: linear-gradient(135deg, #00f2fe, #4facfe);
+  transform: scale(1.1);
+}
+/* CONTAINER */
+.container {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 80px 40px;
+}
+
+/* DARK OVERLAY */
+.container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* CARD (GLASS EFFECT) */
+.card {
+  position: relative;
+  z-index: 1;
+
+  background: rgba(255, 255, 255, 0.1);
+  margin: 20px;
+  padding: 25px;
+  width: 240px;
+  border-radius: 20px;
+  text-align: center;
+
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255,255,255,0.2);
+
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  transition: all 0.4s ease;
+
+  display: none;
+}
+
+/* SHOW CLASS */
+.show {
+  display: block;
+}
+
+/* IMAGE */
+.card img {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(255,255,255,0.5);
+}
+
+/* TEXT */
+.card h3 {
+  margin: 12px 0 5px;
+  font-size: 20px;
+}
+
+.card p {
+  color: #ddd;
+  font-size: 14px;
+}
+
+/* HOVER EFFECT */
+.card:hover {
+  transform: translateY(-15px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+}
+
+.projects {
+  position: relative;
+  padding: 80px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* DARK OVERLAY */
+.projects::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* PROJECT CONTAINER */
+.project-container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* PROJECT CARD */
+.project-card {
+  position: relative;
+  z-index: 1;
+
+  background: rgba(255, 255, 255, 0.1);
+  margin: 20px;
+  padding: 25px;
+  width: 240px;
+  border-radius: 20px;
+  text-align: center;
+
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255,255,255,0.2);
+
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  transition: all 0.4s ease;
+}
+
+/* IMAGE */
+.project-card img {
+  width: 110px;
+  height: 110px;
+  border-radius: 15px;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+/* TEXT */
+.project-card h3 {
+  margin: 12px 0 5px;
+  font-size: 20px;
+}
+
+.project-card p {
+  color: #ddd;
+  font-size: 14px;
+}
+
+/* HOVER */
+.project-card:hover {
+  transform: translateY(-15px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+}
+
+/* BUTTON */
+.project-card button {
+  margin-top: 12px;
+  padding: 10px 20px;
+  border: none;
+  background: linear-gradient(135deg, #ff7e5f, #feb47b);
+  border-radius: 25px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.project-card button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 5px 20px rgba(255,126,95,0.6);
+}
+
+/* ===============================
+   JOIN SECTION
+   =============================== */
+.join {
+  margin: 60px auto;
+  padding: 40px;
+  width: 60%;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  color: white;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* JOIN BUTTON */
+.join button {
+  padding: 12px 25px;
+  background: linear-gradient(135deg, #ff7e5f, #feb47b);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.join button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 5px 20px rgba(255,126,95,0.6);
+}
+/* ===============================
+   CELEBRATION GALLERY (ISDRC STYLE)
+=============================== */
+
+.gallery-section {
+  position: relative;
+  padding: 80px 40px;
+  text-align: center;
+}
+
+/* DARK OVERLAY (same as container/projects) */
+.gallery-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* TITLE */
+.gallery-section h2,
+.gallery-section p {
+  position: relative;
+  z-index: 1;
+}
+
+/* GRID */
+.gallery {
+  position: relative;
+  z-index: 1;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  margin-top: 30px;
+}
+
+/* CARD STYLE (MATCH YOUR GLASS DESIGN) */
+.gallery-item {
+  overflow: hidden;
+  border-radius: 15px;
+  position: relative;
+
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+}
+
+/* IMAGE */
+.gallery-item img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  cursor: pointer;
+
+  transition: 0.4s ease;
+}
+
+/* HOVER EFFECT */
+.gallery-item:hover img {
+  transform: scale(1.1);
+  filter: brightness(70%);
+}
+
+/* OVERLAY TEXT */
+.gallery-item::after {
+  content: "View";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  opacity: 0;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+
+  transition: 0.3s;
+}
+
+.gallery-item:hover::after {
+  opacity: 1;
+}
+
+/* ===============================
+   LIGHTBOX (FULLSCREEN IMAGE)
+=============================== */
+
+#lightbox {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background: rgba(0,0,0,0.95);
+  text-align: center;
+}
+
+#lightbox img {
+  max-width: 85%;
+  max-height: 80%;
+  margin-top: 5%;
+  border-radius: 15px;
+}
+
+#lightbox span {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+
+  font-size: 45px;
+  color: white;
+  cursor: pointer;
+}

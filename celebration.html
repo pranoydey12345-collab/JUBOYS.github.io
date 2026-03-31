@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Members | Jadavpur Physics</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="nav-logo">
+    <img src="images/logo.png" alt="Logo">
+
+    <div class="brand-text">
+      <span class="brand-name">THE BACHELOR BOYS[Jadavpur Physics Community]</span>
+      <p class="brand-tagline">
+        Meet the brilliant minds turning ambition into achievement
+      </p>
+    </div>
+  </div>
+  <div class="filters">
+    <button onclick="location.href='isdrc.html'">Our Members</button>
+    <button onclick="goToEvents()">Events</button>
+    <button onclick="goToCelebration()">Celebration</button>
+    <button onclick="location.href='project.html'">Project</button>
+  </div>
+</header>
+<body><!-- CELEBRATION GALLERY -->
+<section id="celebration" class="gallery-section">
+  <h2>Celebration Moments</h2>
+  <p>Glimpses of our seminars, achievements & memories</p>
+
+  <div class="gallery">
+
+    <div class="gallery-item">
+      <img src="images/event1.jpeg" onclick="openLightbox(this)">
+    </div>
+
+    <div class="gallery-item">
+      <img src="images/event2.jpeg" onclick="openLightbox(this)">
+    </div>
+
+    <div class="gallery-item">
+      <img src="images/event3.jpeg" onclick="openLightbox(this)">
+    </div>
+
+    <div class="gallery-item">
+      <img src="images/event4.jpeg" onclick="openLightbox(this)">
+    </div>
+    
+
+    <div class="gallery-item">
+      <img src="images/event5.jpeg" onclick="openLightbox(this)">
+    </div>
+
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <span onclick="closeLightbox()">×</span>
+  <img id="lightbox-img">
+</div>
+<section class="join">
+  <h2>Join Our Community</h2>
+  <p>Are you passionate about turning ambition into achievement?</p>
+ <button onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSe4tvL_5BIEJ9Wq_hju0xf2f9NUg0RfrI1IEIlpv47K4_K0Xw/viewform', '_blank')">
+  Become a Member
+</button>
+</section>
+<script src="script.js"></script>
+</body>
+</html>
