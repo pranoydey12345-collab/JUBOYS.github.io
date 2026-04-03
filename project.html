@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Members | Jadavpur Physics</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style1.css">
 </head>
 <body>
 
@@ -19,18 +19,18 @@
     </div>
   </div>
 
-
   <div class="filters">
-    <button onclick="location.href='index.html'">Our Members</button>
+    <button onclick="location.href='isdrc.html'">Our Members</button>
     <button onclick="goToEvents()">Events</button>
     <button onclick="location.href='celebration.html'">Celebration</button>
     <button onclick="goToProject()">Project</button>
   </div>
 </header>
 
+<h1>Project Titles</h1>
+<input type="text" id="search" placeholder="Search project titles...">
 
 <section class="projects" id="projects">
-
   <h2>Our Projects</h2>
 
   <div class="project-container">
@@ -38,32 +38,38 @@
     <div class="project-card">
       <h3>IoT Weather Station</h3>
       <p>Real-time temperature and humidity monitoring using ESP32</p>
-    <a href="images/pro.jpeg" target="_blank">
-  <button>View Details</button>
-</a>
+      <a href="images/pro.png" target="_blank">
+        <button>View Details</button>
+      </a>
     </div>
 
     <div class="project-card">
       <h3>Air Quality Monitor</h3>
       <p>Detects pollution using MQ135 sensor</p>
-       <a href="images/pro.jpeg" target="_blank">
-      <button>View Details</button>
+      <a href="images/pro.png" target="_blank">
+        <button>View Details</button>
+      </a>
     </div>
-</a>
+
     <div class="project-card">
       <h3>Physics Simulation</h3>
       <p>Interactive simulation of wave motion</p>
-        <a href="images/pro.jpeg" target="_blank">
-  <button>View Details</button>
-</a>
+      <a href="images/pro.png" target="_blank">
+        <button>View Details</button>
+      </a>
     </div>
+
+  </div>
 </section>
-<!-- JOIN -->
+
 <section class="join">
   <h2>Join Our Community</h2>
   <p>Are you passionate about turning ambition into achievement?</p>
   <button onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSe4tvL_5BIEJ9Wq_hju0xf2f9NUg0RfrI1IEIlpv47K4_K0Xw/viewform', '_blank')">
-  Become a Member
-</button>
+    Become a Member
+  </button>
 </section>
 
+<script src="script1.js"></script>
+</body>
+</html>
