@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AQI IoT Project | Jadavpur Physics</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Poppins', Arial, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: white;
+      line-height: 1.7;
+    }
+    .container {
+      width: min(1200px, 92%);
+      margin: auto;
+      padding: 30px 0 60px;
+    }
+    .hero, .section-card, .sensor-card, .live-box {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 24px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+    }
+    .hero {
+      padding: 32px;
+      margin-bottom: 30px;
+    }
+    h1, h2, h3 { margin-top: 0; }
+    h1 { font-size: 2.2rem; }
+    .authors { opacity: 0.9; }
+    .section-card {
+      padding: 18px;
+      margin-bottom: 28px;
+    }
+    .diagram {
+      width: 100%;
+      border-radius: 18px;
+      margin-top: 18px;
+      min-height: 300px;
+      object-fit: cover;
+      background: rgba(255,255,255,0.05);
+    }
+    .sensor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 22px;
+      margin-top: 20px;
+    }
+    .sensor-card {
+      padding: 20px;
+    }
+    .sensor-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 16px;
+      margin-bottom: 14px;
+      background: rgba(255,255,255,0.08);
+    }
+    .live-box {
+      padding: 24px;
+      margin-top: 20px;
+    }
+    .live-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .metric {
+      background: rgba(0,123,255,0.18);
+      border: 1px solid rgba(0,123,255,0.35);
+      border-radius: 18px;
+      padding: 18px;
+      text-align: center;
+    }
+    .metric .value {
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+    code {
+      display: block;
+      white-space: pre-wrap;
+      background: rgba(0,0,0,0.25);
+      padding: 16px;
+      border-radius: 16px;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <h1>Development of an Internet of Things (IoT) based Air Quality Index (AQI) Measuring Device</h1>
+      <p class="authors">
+        <strong>Anindya Biswas, Aritra Singha Roy, Pranoy Dey</strong><br>
+        Department of Physics, Jadavpur University, Kolkata-32<br>
+        anindya.ju.2024@gmail.com | aritrasingharoy00@gmail.com | pranoydey12345@gmail.com
+      </p>
+    </section>
+
+    <section class="section-card">
+      <h2>About the Project</h2>
+      <p>
+        This project develops a low-cost real-time AQI monitoring system using <strong>ESP32</strong>,
+        <strong>PMS5003</strong>, <strong>MQ135</strong>, and <strong>DHT11</strong>. The system measures PM2.5,
+        PM10, harmful gases, temperature, and humidity, then uploads the live sensor data to
+        <strong>Google Firebase</strong> using Wi-Fi. A connected mobile app reads this database and displays
+        the air quality parameters in real time.
+      </p>
+      <p>
+        The aim is to raise awareness of pollution levels and support health precautions through
+        continuous monitoring. This system is useful for environmental studies, urban monitoring,
+        and public health applications.
+      </p>
+    </section>
+
+    <section class="section-card">
+      <h2>Circuit Diagram</h2>
+      <p>Replace the placeholder image below with your actual circuit diagram.</p>
+      <img class="diagram" src="c.png" alt="AQI Circuit Diagram">
+    </section>
+
+    <section class="section-card">
+      <h2>Components Used</h2>
+      <div class="sensor-grid">
+        <div class="sensor-card">
+          <img src="m.png" alt="MQ135 Sensor">
+          <h3>MQ135 Gas Sensor</h3>
+          <p>Detects NH3, CO2, smoke, benzene, alcohol, and other harmful gases to estimate air quality.</p>
+        </div>
+
+        <div class="sensor-card">
+          <img src="p.png" alt="PMS5003 Sensor">
+          <h3>PMS5003 PM Sensor</h3>
+          <p>Uses laser scattering to measure PM2.5 and PM10 particle concentration in µg/m³.</p>
+        </div>
+
+        <div class="sensor-card">
+          <img src="d.png" alt="DHT11 Sensor">
+          <h3>DHT11 Sensor</h3>
+          <p>Measures ambient temperature and humidity to improve air-condition context analysis.</p>
+        </div>
+
+        <div class="sensor-card">
+          <img src="e.png" alt="ESP32">
+          <h3>ESP32 Controller</h3>
+          <p>Main microcontroller with Wi-Fi that collects sensor data and pushes it to Firebase/API.</p>
+        </div>
+       
+      </div>
+    </section>
+
+    <section class="live-box">
+      <h2>Live Real-Time AQI Data</h2>
+      <p>This section calls your API and updates the live project readings automatically.</p>
+
+      <div class="live-grid" id="liveData">
+        <div class="metric"><div>PM2.5</div><div class="value" id="pm25">--</div></div>
+        <div class="metric"><div>PM10</div><div class="value" id="pm10">--</div></div>
+        <div class="metric"><div>Gas</div><div class="value" id="gas">--</div></div>
+        <div class="metric"><div>Temp</div><div class="value" id="temp">--</div></div>
+        <div class="metric"><div>Humidity</div><div class="value" id="hum">--</div></div>
+      </div>
+
+      <code>
+API endpoint placeholder: https://your-api-url.com/aqi/live
+      </code>
+    </section>
+  </div>
+
+  <script>
+    async function loadAQIData() {
+      try {
+        const response = await fetch('https://your-api-url.com/aqi/live');
+        const data = await response.json();
+
+        document.getElementById('pm25').textContent = data.pm25 + ' µg/m³';
+        document.getElementById('pm10').textContent = data.pm10 + ' µg/m³';
+        document.getElementById('gas').textContent = data.gas;
+        document.getElementById('temp').textContent = data.temperature + ' °C';
+        document.getElementById('hum').textContent = data.humidity + ' %';
+      } catch (error) {
+        console.error('API Error:', error);
+      }
+    }
+
+    loadAQIData();
+    setInterval(loadAQIData, 5000);
+  </script>
+</body>
+</html>
