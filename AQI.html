@@ -33,7 +33,7 @@
     h1 { font-size: 2.2rem; }
     .authors { opacity: 0.9; }
     .section-card {
-      padding: 18px;
+      padding: 28px;
       margin-bottom: 28px;
     }
     .diagram {
@@ -90,7 +90,95 @@
       border-radius: 16px;
       margin-top: 16px;
     }
-  </style>
+ /* ================= LIVE DATA ================= */
+.gauge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.gauge-card {
+  background: rgba(255,255,255,0.06);
+  padding: 20px;
+  border-radius: 20px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.gauge {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  margin: auto;
+}
+
+svg {
+  width: 140px;
+  height: 140px;
+  transform: rotate(-90deg);
+}
+
+circle {
+  fill: none;
+  stroke-width: 10;
+  stroke-linecap: round;
+}
+
+.bg {
+  stroke: rgba(255,255,255,0.1);
+}
+
+.progress {
+  stroke: #00e5ff;
+  stroke-dasharray: 377;
+  stroke-dashoffset: 377;
+  transition: stroke-dashoffset 1s ease;
+}
+
+.gauge-value {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+  font-weight: bold;
+}
+/* ================= AQI TABLE ================= */
+.aqi-table {
+    margin-top: 20px;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    padding: 12px;
+    font-weight: bold;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.5s forwards;
+}
+
+.row:nth-child(1){animation-delay:0.1s;}
+.row:nth-child(2){animation-delay:0.2s;}
+.row:nth-child(3){animation-delay:0.3s;}
+.row:nth-child(4){animation-delay:0.4s;}
+.row:nth-child(5){animation-delay:0.5s;}
+.row:nth-child(6){animation-delay:0.6s;}
+
+@keyframes fadeUp {
+    to { opacity:1; transform: translateY(0); }
+}
+
+/* COLORS */
+.green{background:#00c853;}
+.yellow{background:#ffd600;color:black;}
+.orange{background:#ff9100;}
+.red{background:#d50000;}
+.purple{background:#6a1b9a;}
+.maroon{background:#880e4f;}
+
+</style>
 </head>
 <body>
   <div class="container">
@@ -126,7 +214,7 @@
     </section>
 
     <section class="section-card">
-      <h2>Components Used</h2>
+      <h2>Sensors Used</h2>
       <div class="sensor-grid">
         <div class="sensor-card">
           <img src="m.png" alt="MQ135 Sensor">
@@ -151,46 +239,109 @@
           <h3>ESP32 Controller</h3>
           <p>Main microcontroller with Wi-Fi that collects sensor data and pushes it to Firebase/API.</p>
         </div>
-       
       </div>
     </section>
+<!-- LIVE DATA -->
+   <div class="card">
+  <h2>Live Data</h2>
+  <div class="card">
+  <h2>Live Data</h2>
 
-    <section class="live-box">
-      <h2>Live Real-Time AQI Data</h2>
-      <p>This section calls your API and updates the live project readings automatically.</p>
+  <div class="gauge-grid">
 
-      <div class="live-grid" id="liveData">
-        <div class="metric"><div>PM2.5</div><div class="value" id="pm25">--</div></div>
-        <div class="metric"><div>PM10</div><div class="value" id="pm10">--</div></div>
-        <div class="metric"><div>Gas</div><div class="value" id="gas">--</div></div>
-        <div class="metric"><div>Temp</div><div class="value" id="temp">--</div></div>
-        <div class="metric"><div>Humidity</div><div class="value" id="hum">--</div></div>
+    <div class="gauge-card">
+      <h3>Temperature</h3>
+      <div class="gauge">
+        <svg>
+          <circle class="bg" cx="70" cy="70" r="60"></circle>
+          <circle id="tempCircle" class="progress" cx="70" cy="70" r="60"></circle>
+        </svg>
+        <div id="tempVal" class="gauge-value">--</div>
       </div>
+    </div>
 
-      <code>
-API endpoint placeholder: https://your-api-url.com/aqi/live
-      </code>
-    </section>
+    <div class="gauge-card">
+      <h3>PM2.5</h3>
+      <div class="gauge">
+        <svg>
+          <circle class="bg" cx="70" cy="70" r="60"></circle>
+          <circle id="pm25Circle" class="progress" cx="70" cy="70" r="60"></circle>
+        </svg>
+        <div id="pm25Val" class="gauge-value">--</div>
+      </div>
+    </div>
+
+    <div class="gauge-card">
+      <h3>Humidity</h3>
+      <div class="gauge">
+        <svg>
+          <circle class="bg" cx="70" cy="70" r="60"></circle>
+          <circle id="humCircle" class="progress" cx="70" cy="70" r="60"></circle>
+        </svg>
+        <div id="humVal" class="gauge-value">--</div>
+      </div>
+    </div>
+
+    <div class="gauge-card">
+      <h3>AQI</h3>
+      <div class="gauge">
+        <svg>
+          <circle class="bg" cx="70" cy="70" r="60"></circle>
+          <circle id="aqiCircle" class="progress" cx="70" cy="70" r="60"></circle>
+        </svg>
+        <div id="aqiVal" class="gauge-value">--</div>
+      </div>
+    </div>
+
   </div>
+</div>
+  <div class="live-grid">
+    <div class="metric"><div>PM2.5</div><div id="pm25" class="value">--</div></div>
+    <div class="metric"><div>PM10</div><div id="pm10" class="value">--</div></div>
+    <div class="metric"><div>Temp</div><div id="temp" class="value">--</div></div>
+    <div class="metric"><div>Humidity</div><div id="hum" class="value">--</div></div>
+  </div>
+</div>
 
-  <script>
-    async function loadAQIData() {
-      try {
-        const response = await fetch('https://your-api-url.com/aqi/live');
-        const data = await response.json();
+<!-- AQI TABLE -->
+<div class="card">
+  <h2>AQI Scale</h2>
+  <div class="aqi-table">
+    <div class="row green"><div>Good</div><div>Safe</div><div>0-50</div></div>
+    <div class="row yellow"><div>Moderate</div><div>Okay</div><div>51-100</div></div>
+    <div class="row orange"><div>Unhealthy</div><div>Risk</div><div>101-200</div></div>
+    <div class="row red"><div>Very Unhealthy</div><div>Danger</div><div>201-300</div></div>
+    <div class="row purple"><div>Severe</div><div>High Risk</div><div>301-400</div></div>
+    <div class="row maroon"><div>Hazardous</div><div>Critical</div><div>401+</div></div>
+  </div>
+</div>
 
-        document.getElementById('pm25').textContent = data.pm25 + ' µg/m³';
-        document.getElementById('pm10').textContent = data.pm10 + ' µg/m³';
-        document.getElementById('gas').textContent = data.gas;
-        document.getElementById('temp').textContent = data.temperature + ' °C';
-        document.getElementById('hum').textContent = data.humidity + ' %';
-      } catch (error) {
-        console.error('API Error:', error);
-      }
-    }
+<script>
 
-    loadAQIData();
-    setInterval(loadAQIData, 5000);
-  </script>
+/* AQI BOX */
+async function loadData(){
+    try{
+        const res = await fetch("https://your-api-url.com/aqi/live", {
+            headers: {
+                "x-api-key": "nFwBBjhQLIdIrXL8@rWFMVcDQ"
+            }
+        });
+
+        const d = await res.json();
+
+        document.getElementById("tempVal").textContent = d.temperature + "°C";
+        document.getElementById("pm25Val").textContent = d.pm25;
+        document.getElementById("humVal").textContent = d.humidity + "%";
+        document.getElementById("aqiVal").textContent = d.pm25;
+
+        setGauge(document.getElementById("tempCircle"), d.temperature, 50);
+        setGauge(document.getElementById("pm25Circle"), d.pm25, 300);
+        setGauge(document.getElementById("humCircle"), d.humidity, 100);
+        setGauge(document.getElementById("aqiCircle"), d.pm25, 300);
+
+    }catch(e){ console.log(e); }
+}
+</script>
+
 </body>
 </html>
