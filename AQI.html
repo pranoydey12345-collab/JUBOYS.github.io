@@ -1,10 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AQI IoT Project | Jadavpur Physics</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AQI IoT Project | Jadavpur Physics</title>
+
 <style>
+:root{
+  --bg1:#0f2027;
+  --bg2:#203a43;
+  --bg3:#2c5364;
+  --glass: rgba(255,255,255,0.08);
+  --border: rgba(255,255,255,0.15);
+}
+
 *{
   box-sizing:border-box;
   margin:0;
@@ -13,8 +22,8 @@
 }
 
 body{
-  background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-  color:white;
+  background: linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));
+  color:#fff;
   line-height:1.6;
 }
 
@@ -24,21 +33,30 @@ body{
   padding:30px 0 60px;
 }
 
-/* ---------- CARDS ---------- */
+/* ---------------- CARDS ---------------- */
 .card{
-  background: rgba(255,255,255,0.08);
-  border:1px solid rgba(255,255,255,0.15);
+  background: var(--glass);
+  border:1px solid var(--border);
   border-radius:20px;
   padding:22px;
   margin-bottom:20px;
   backdrop-filter: blur(10px);
 }
 
-/* ---------- HERO ---------- */
-.hero h1{font-size:1.9rem;}
-.authors{opacity:0.85;margin-top:10px}
+h1,h2,h3{ margin-bottom:10px; }
 
-/* ---------- SENSOR GRID ---------- */
+/* ---------------- HERO ---------------- */
+.hero h1{
+  font-size:2rem;
+}
+
+.authors{
+  opacity:0.85;
+  font-size:0.95rem;
+  margin-top:10px;
+}
+
+/* ---------------- SENSOR GRID ---------------- */
 .grid{
   display:grid;
   grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
@@ -53,55 +71,12 @@ body{
   margin-bottom:10px;
 }
 
-/* ---------- GAUGE ---------- */
-.gauge-wrapper{
-  display:flex;
-  justify-content:center;
-  margin:20px 0;
-}
-
-.gauge{
-  position:relative;
-  width:170px;
-  height:170px;
-}
-
-svg{
-  width:170px;
-  height:170px;
-  transform:rotate(-90deg);
-}
-
-circle{
-  fill:none;
-  stroke-width:12;
-}
-
-.bg{
-  stroke:rgba(255,255,255,0.1);
-}
-
-.progress{
-  stroke:#00e5ff;
-  stroke-dasharray:377;
-  stroke-dashoffset:377;
-  transition:stroke-dashoffset 1s ease, stroke 0.5s ease;
-}
-
-.gauge-value{
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  font-size:30px;
-  font-weight:bold;
-}
-
-/* ---------- METRICS ---------- */
+/* ---------------- LIVE DATA ---------------- */
 .metrics{
   display:grid;
   grid-template-columns: repeat(auto-fit,minmax(160px,1fr));
   gap:12px;
+  margin-top:10px;
 }
 
 .metric{
@@ -113,11 +88,12 @@ circle{
 }
 
 .metric .value{
-  font-size:1.5rem;
+  font-size:1.6rem;
   font-weight:bold;
+  margin-top:5px;
 }
 
-/* ---------- BUTTONS ---------- */
+/* ---------------- BUTTONS ---------------- */
 .btns{
   display:flex;
   flex-wrap:wrap;
@@ -134,15 +110,17 @@ button{
   transition:0.2s;
 }
 
-button:hover{transform:scale(1.05);}
+button:hover{
+  transform:scale(1.05);
+}
 
 .good{background:#00c853;}
 .mod{background:#ffd600;color:#000;}
 .unh{background:#ff9100;}
-.vunh{background:#d50000;}
-.severe{background:#6a1b9a;}
+.vunh{background:#d50000;color:#fff;}
+.severe{background:#6a1b9a;color:#fff;}
 
-/* ---------- AQI TABLE ---------- */
+/* ---------------- AQI TABLE ---------------- */
 .row{
   display:grid;
   grid-template-columns:1fr 2fr 1fr;
@@ -159,142 +137,118 @@ button:hover{transform:scale(1.05);}
 .purple{background:#6a1b9a;}
 .maroon{background:#880e4f;}
 
+/* ---------------- IMAGE ---------------- */
+.diagram{
+  width:100%;
+  border-radius:15px;
+  margin-top:10px;
+}
 </style>
 </head>
 
 <body>
- <div class="container">
 
-<!-- HERO -->
+<div class="container">
 
-    <section class="hero">
-      <h1>Development of an Internet of Things (IoT) based Air Quality Index (AQI) Measuring Device</h1>
-      <p class="authors">
-        <strong>Anindya Biswas, Aritra Singha Roy, Pranoy Dey</strong><br>
-        Department of Physics, Jadavpur University, Kolkata-32<br>
-        anindya.ju.2024@gmail.com | aritrasingharoy00@gmail.com | pranoydey12345@gmail.com
-      </p>
-</div>
+  <!-- HERO -->
+  <div class="card hero">
+    <h1>IoT Based Air Quality Index (AQI) Monitoring System</h1>
+    <p class="authors">
+      <b>Jadavpur University Physics Project</b><br>
+      Anindya Biswas | Aritra Singha Roy | Pranoy Dey
+    </p>
+  </div>
 
-<!-- ABOUT -->
-   <div class="section-card">
-      <h2>About the Project</h2>
-           <p>
-        This project develops a low-cost real-time AQI monitoring system using <strong>ESP32</strong>,
-        <strong>PMS5003</strong>, <strong>MQ135</strong>, and <strong>DHT11</strong>. The system measures PM2.5,
-        PM10, harmful gases, temperature, and humidity, then uploads the live sensor data to
-        <strong>Google Firebase</strong> using Wi-Fi. A connected mobile app reads this database and displays
-        the air quality parameters in real time.
-      </p>
-      <p>
-        The aim is to raise awareness of pollution levels and support health precautions through
-        continuous monitoring. This system is useful for environmental studies, urban monitoring,
-        and public health applications.
-      </p>
-   </div>
+  <!-- ABOUT -->
+  <div class="card">
+    <h2>About Project</h2>
+    <p>
+      Low-cost real-time AQI system using ESP32, PMS5003, MQ135, and DHT11.
+      Data is sent via Wi-Fi to Firebase and visualized in real time.
+    </p>
+  </div>
 
-<!-- SENSOR -->
-<div class="card">
-  <h2>Sensors</h2>
+  <!-- CIRCUIT -->
+  <div class="card">
+    <h2>Circuit Diagram</h2>
+    <img class="diagram" src="c.png" alt="circuit">
+  </div>
 
-  <div class="grid">
-    <div class="card sensor">
-      <img src="m.png"><h3>MQ135</h3>
-    </div>
-    <div class="card sensor">
-      <img src="p.png"><h3>PMS5003</h3>
-    </div>
-    <div class="card sensor">
-      <img src="d.png"><h3>DHT11</h3>
-    </div>
-    <div class="card sensor">
-      <img src="e.png"><h3>ESP32</h3>
+  <!-- SENSORS -->
+  <div class="card">
+    <h2>Sensors Used</h2>
+
+    <div class="grid">
+      <div class="card sensor">
+        <img src="m.png">
+        <h3>MQ135</h3>
+        <p>Gas detection (CO2, NH3, smoke etc.)</p>
+      </div>
+
+      <div class="card sensor">
+        <img src="p.png">
+        <h3>PMS5003</h3>
+        <p>PM2.5 / PM10 measurement</p>
+      </div>
+
+      <div class="card sensor">
+        <img src="d.png">
+        <h3>DHT11</h3>
+        <p>Temperature & Humidity</p>
+      </div>
+
+      <div class="card sensor">
+        <img src="e.png">
+        <h3>ESP32</h3>
+        <p>Wi-Fi controller & data upload</p>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- GAUGE -->
-<div class="card">
+  <!-- LIVE DATA -->
+  <div class="card">
+    <h2>Live Simulation Dashboard</h2>
 
-<h2>Live AQI Dashboard</h2>
+    <div class="metrics">
+      <div class="metric">PM2.5<div class="value" id="pm25">--</div></div>
+      <div class="metric">PM10<div class="value" id="pm10">--</div></div>
+      <div class="metric">Temp<div class="value" id="temp">--</div></div>
+      <div class="metric">Humidity<div class="value" id="hum">--</div></div>
+      <div class="metric">AQI<div class="value" id="aqi">--</div></div>
+    </div>
 
-<div class="gauge-wrapper">
-  <div class="gauge">
-    <svg>
-      <circle class="bg" cx="85" cy="85" r="60"></circle>
-      <circle class="progress" cx="85" cy="85" r="60"></circle>
-    </svg>
-    <div class="gauge-value" id="aqiValue">0</div>
+    <div class="btns">
+      <button class="good" onclick="setData(10,20,28,60,40)">GOOD</button>
+      <button class="mod" onclick="setData(40,80,32,65,90)">MODERATE</button>
+      <button class="unh" onclick="setData(120,180,35,70,160)">UNHEALTHY</button>
+      <button class="vunh" onclick="setData(250,300,38,80,260)">VERY UNHEALTHY</button>
+      <button class="severe" onclick="setData(350,400,40,85,350)">SEVERE</button>
+    </div>
   </div>
-</div>
 
-<div class="metrics">
-  <div class="metric">PM2.5<div class="value" id="pm25">--</div></div>
-  <div class="metric">PM10<div class="value" id="pm10">--</div></div>
-  <div class="metric">Temp<div class="value" id="temp">--</div></div>
-  <div class="metric">Humidity<div class="value" id="hum">--</div></div>
-</div>
+  <!-- AQI SCALE -->
+  <div class="card">
+    <h2>AQI Scale</h2>
 
-<div class="btns">
-  <button class="good" onclick="setData(10,20,28,60,40)">GOOD</button>
-  <button class="mod" onclick="setData(40,80,32,65,90)">MODERATE</button>
-  <button class="unh" onclick="setData(120,180,35,70,160)">UNHEALTHY</button>
-  <button class="vunh" onclick="setData(250,300,38,80,260)">VERY UNHEALTHY</button>
-  <button class="severe" onclick="setData(350,400,40,85,350)">SEVERE</button>
-</div>
+    <div class="row green"><div>Good</div><div>Safe</div><div>0–50</div></div>
+    <div class="row yellow"><div>Moderate</div><div>Okay</div><div>51–100</div></div>
+    <div class="row orange"><div>Unhealthy</div><div>Risk</div><div>101–200</div></div>
+    <div class="row red"><div>Very Unhealthy</div><div>Danger</div><div>201–300</div></div>
+    <div class="row purple"><div>Severe</div><div>High Risk</div><div>301–400</div></div>
+    <div class="row maroon"><div>Hazardous</div><div>Critical</div><div>401+</div></div>
 
-</div>
-
-<!-- AQI SCALE -->
-<div class="card">
-<h2>AQI Scale</h2>
-
-<div class="row green"><div>Good</div><div>Safe</div><div>0–50</div></div>
-<div class="row yellow"><div>Moderate</div><div>Okay</div><div>51–100</div></div>
-<div class="row orange"><div>Unhealthy</div><div>Risk</div><div>101–200</div></div>
-<div class="row red"><div>Very Unhealthy</div><div>Danger</div><div>201–300</div></div>
-<div class="row purple"><div>Severe</div><div>High Risk</div><div>301–400</div></div>
-<div class="row maroon"><div>Hazardous</div><div>Critical</div><div>401+</div></div>
-
-</div>
+  </div>
 
 </div>
 
 <script>
-
-function setAQIColor(aqi){
-  if(aqi<=50) return "#00c853";
-  if(aqi<=100) return "#ffd600";
-  if(aqi<=200) return "#ff9100";
-  if(aqi<=300) return "#d50000";
-  if(aqi<=400) return "#6a1b9a";
-  return "#880e4f";
-}
-
 function setData(pm25, pm10, temp, hum, aqi){
-
   document.getElementById("pm25").innerText = pm25;
   document.getElementById("pm10").innerText = pm10;
-  document.getElementById("temp").innerText = temp+"°C";
-  document.getElementById("hum").innerText = hum+"%";
-
-  document.getElementById("aqiValue").innerText = aqi;
-
-  const circle = document.querySelector(".progress");
-  const radius = 60;
-  const circumference = 2*Math.PI*radius;
-
-  const percent = Math.min(aqi/500,1);
-  const offset = circumference - percent*circumference;
-
-  circle.style.strokeDasharray = circumference;
-  circle.style.strokeDashoffset = offset;
-
-  const color = setAQIColor(aqi);
-  circle.style.stroke = color;
-  document.getElementById("aqiValue").style.color = color;
+  document.getElementById("temp").innerText = temp + "°C";
+  document.getElementById("hum").innerText = hum + "%";
+  document.getElementById("aqi").innerText = aqi;
 }
-
 </script>
 
 </body>
