@@ -357,15 +357,16 @@
                 <div class="bg-slate-950 p-3 rounded border border-slate-800 space-y-2">
                     <div class="text-emerald-400 font-bold">Resonant Parameters Analyzed:</div>
                     <p class="text-slate-300 leading-relaxed">
-                        The experimental parallel network yields a maximum dynamic resistance $R_d = L/(C \cdot r)$ at resonance. When the periodic input contains frequencies that match $f = f_0/n$, the circuit selectively filters and isolates that harmonic component, confirming **Fourier's Theorem**.
+                         The RLC circuit resonates near its theoretical natural frequency.
                     </p>
                 </div>
                 <div class="bg-slate-950 p-3 rounded border border-slate-800 space-y-2">
                     <div class="text-indigo-400 font-bold">Analytical Conclusion Checklist:</div>
                     <ul class="list-disc pl-4 space-y-1 text-slate-300">
-                        <li>Natural Frequency observed closely models $f_0 \approx \frac{1}{2\pi}\sqrt{\frac{1}{LC} - \frac{r^2}{L^2}}$.</li>
-                        <li>Square and Triangular signals contain only odd-integer harmonics ($1, 3, 5, 7$).</li>
-                        <li>Half-Sinusoidal signals exhibit a distinct secondary peak even-order decay pattern.</li>
+                        <li>Half-Sinusoidal Waves: Evaluates both fundamental and even terms(f0 ,f0/2,f0/4).</li>
+                        <li>Square and triangular waves contain only odd harmonics(f0,f0/3,f0/5,f0/7).</li>
+                        <li>Square wave: odd harmonics decrease as 1/n.</li>
+                        <li>Triangular wave: odd harmonics decrease much faster, as 1/n^2 .</li>
                     </ul>
                 </div>
             </div>
