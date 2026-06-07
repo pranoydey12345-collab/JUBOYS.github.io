@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fourier Spectrum & Parallel Resonance Virtual Lab</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0b0f19; color: #f1f5f9; }
+        .cro-screen { background-color: #021e11; border-radius: 8px; box-shadow: inset 0 0 25px rgba(0,0,0,0.95); }
+        input[type=range] { accent-color: #10b981; }
+        .input-table { background: #1e293b; border: 1px solid #475569; color: #38bdf8; text-align: center; font-family: monospace; border-radius: 4px; padding: 2px; }
+        .input-table:focus { outline: none; border-color: #10b981; }
+    </style>
+</head>
+<body class="min-h-screen p-4 lg:p-8">
+
+    <div class="max-w-7xl mx-auto space-y-8">
+        <div class="text-center border-b border-slate-800 pb-4">
+            <h1 class="text-3xl font-bold text-emerald-400">Fourier Spectrum Analysis of Complex Waveforms</h1>
+            <p class="text-slate-400 text-sm mt-1">Using a Parallel Resonant LC Circuit & Digital Oscilloscope Monitoring Created By Pranoy Dey</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-xl space-y-4">
+                <h2 class="text-lg font-semibold text-slate-200 border-b border-slate-800 pb-2 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span> 1. Circuit Component Parameters
+                </h2>
+                <div class="space-y-1">
+                    <label class="text-xs text-slate-400 flex justify-between">
+                        <span>Inductance (L)</span>
+                        <span id="val-L" class="text-emerald-400 font-mono font-bold">10.0 mH</span>
+                    </label>
+                    <input type="range" id="param-L" min="2" max="30" step="0.1" value="10" class="w-full">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs text-slate-400 flex justify-between">
+                        <span>Capacitance (C)</span>
+                        <span id="val-C" class="text-cyan-400 font-mono font-bold">0.022 µF</span>
+                    </label>
+                    <input type="range" id="param-C" min="0.005" max="0.1" step="0.001" value="0.022" class="w-full">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs text-slate-400 flex justify-between">
+                        <span>Coil Resistance (r)</span>
+                        <span id="val-r" class="text-amber-500 font-mono font-bold">15.0 Ω</span>
+                    </label>
+                    <input type="range" id="param-r" min="2" max="50" step="0.5" value="15" class="w-full">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs text-slate-400 flex justify-between">
+                        <span>Series Resistance (R)</span>
+                        <span class="text-indigo-400 font-mono font-bold">10.0 kΩ</span>
+                    </label>
+                </div>
+                <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 text-xs font-mono space-y-1">
+                    <div class="text-slate-500 font-semibold mb-1">Calculated Resonant Metrics:</div>
+                    <div class="flex justify-between"><span>Natural Resonant Freq (f₀):</span><span id="calc-f0" class="text-yellow-400">-- kHz</span></div>
+                    <div class="flex justify-between"><span>Dynamic Resistance (R_d):</span><span id="calc-rd" class="text-yellow-400">-- Ω</span></div>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-xl space-y-4">
+                <h2 class="text-lg font-semibold text-slate-200 border-b border-slate-800 pb-2 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-cyan-500"></span> 2. Function Generator Controls
+                </h2>
+                <div class="space-y-2">
+                    <label class="text-xs text-slate-400 block">Input Waveform Shape</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button id="wave-sine" class="px-3 py-2 text-xs font-medium rounded bg-emerald-600 text-white shadow">Sine Wave</button>
+                        <button id="wave-square" class="px-3 py-2 text-xs font-medium rounded bg-slate-800 text-slate-400 hover:text-white">Square</button>
+                        <button id="wave-triangle" class="px-3 py-2 text-xs font-medium rounded bg-slate-800 text-slate-400 hover:text-white">Triangle</button>
+                    </div>
+                    <div class="mt-2">
+                        <button id="wave-halfsin" class="w-full px-3 py-2 text-xs font-medium rounded bg-slate-800 text-slate-400 hover:text-white">Half-Sinusoidal Wave</button>
+                    </div>
+                </div>
+                <div class="space-y-1 pt-2">
+                    <label class="text-xs text-slate-400 flex justify-between">
+                        <span>Source Frequency (f)</span>
+                        <span id="val-freq" class="text-cyan-400 font-mono font-bold">10.00 kHz</span>
+                    </label>
+                    <input type="range" id="param-freq" min="1" max="40" step="0.05" value="10" class="w-full">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs text-slate-400 flex justify-between">
+                        <span>Source Amplitude (V_in Peak)</span>
+                        <span class="text-slate-300 font-mono font-bold">10.0 V</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-xl flex flex-col justify-between">
+                <h2 class="text-lg font-semibold text-slate-200 border-b border-slate-800 pb-2">3. Circuit Layout Scheme</h2>
+                <div class="flex-grow flex items-center justify-center p-2 bg-slate-950 rounded-lg border border-slate-800 my-2">
+                    <svg class="w-full max-w-[280px] h-auto" viewBox="0 0 200 140" fill="none" stroke="#94a3b8" stroke-width="1.5">
+                        <circle cx="20" cy="70" r="10" />
+                        <path d="M15 70 Q20 62 25 70 T30 70" stroke-width="1" />
+                        <text x="14" y="95" fill="#10b981" font-size="8" font-family="monospace">V_in(t)</text>
+                        <path d="M20 20 L20 60 M20 80 L20 120" />
+                        <path d="M20 20 L60 20" />
+                        <path d="M60 20 L65 15 L70 25 L75 15 L80 25 L85 15 L90 25 L95 20" />
+                        <text x="73" y="10" fill="#94a3b8" font-size="8">R</text>
+                        <path d="M95 20 L130 20" />
+                        <path d="M130 20 L130 40" />
+                        <path d="M130 20 L170 20 L170 40" />
+                        <path d="M120 40 L140 40 M120 46 L140 46" />
+                        <path d="M130 46 L130 70" />
+                        <text x="108" y="46" fill="#22d3ee" font-size="8">C</text>
+                        <path d="M170 40 Q165 43 170 46 T170 52 T170 58 T170 64" fill="none"/>
+                        <text x="176" y="48" fill="#10b981" font-size="8">L</text>
+                        <path d="M170 64 L170 70 L165 73 L175 76 L165 79 L175 82 L170 85 L170 90" />
+                        <text x="176" y="81" fill="#f59e0b" font-size="8">r</text>
+                        <path d="M130 70 L130 90 L170 90" />
+                        <path d="M130 90 L130 120 L20 120" />
+                        <path d="M130 90 L185 90" />
+                        <path d="M130 20 L185 20" />
+                        <circle cx="185" cy="20" r="1.5" fill="#ef4444"/>
+                        <circle cx="185" cy="90" r="1.5" fill="#ef4444"/>
+                        <text x="174" y="15" fill="#ef4444" font-size="8" font-weight="bold">CH II</text>
+                        <path d="M75 120 L75 126 M70 126 L80 126 M72 129 L78 129 M74 132 L76 132" />
+                    </svg>
+                </div>
+                <div class="text-[10px] text-slate-500 leading-relaxed">
+                    CH I displays the raw driver source profile. CH II samples output potential across the frequency-dependent resonant LC block.
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 shadow-xl">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-100">Dual-Trace Oscilloscope Visualization</h2>
+                    <p class="text-xs text-slate-400">Monitoring real-time continuous signal processing profiles</p>
+                </div>
+                <div class="flex flex-wrap gap-3 items-center font-mono text-xs">
+                    <div class="flex flex-col">
+                        <span class="text-slate-500 text-[10px]">TIMEBASE</span>
+                        <select id="cro-timebase" class="bg-slate-800 border border-slate-700 rounded px-2 py-1 text-emerald-400">
+                            <option value="0.02">20 µs/Div</option>
+                            <option value="0.05" selected>50 µs/Div</option>
+                            <option value="0.1">0.1 ms/Div</option>
+                            <option value="0.2">0.2 ms/Div</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-slate-500 text-[10px]">CH II VOLTS/DIV</span>
+                        <select id="cro-vdiv" class="bg-slate-800 border border-slate-700 rounded px-2 py-1 text-cyan-400">
+                            <option value="1">1 V/Div</option>
+                            <option value="2" selected>2 V/Div</option>
+                            <option value="5">5 V/Div</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
+                <div class="md:col-span-3 bg-black p-2 rounded-xl border border-slate-950 flex justify-center">
+                    <canvas id="cro-viewport" width="600" height="320" class="cro-screen w-full h-auto max-w-[600px]"></canvas>
+                </div>
+                <div class="space-y-4 bg-slate-950 p-4 rounded-xl border border-slate-850 h-full flex flex-col justify-center">
+                    <div class="border-l-4 border-emerald-400 pl-2">
+                        <div class="text-xs text-slate-400 font-semibold">Channel I (Input Reference)</div>
+                        <div id="val-v1-pk" class="text-sm font-mono text-emerald-400 font-bold">10.0 V (Peak)</div>
+                    </div>
+                    <div class="border-l-4 border-cyan-400 pl-2">
+                        <div class="text-xs text-slate-400 font-semibold">Channel II (LC Tuned Out)</div>
+                        <div id="val-v2-pk" class="text-sm font-mono text-cyan-400 font-bold">0.00 V (Peak)</div>
+                    </div>
+                    <div class="text-[11px] text-slate-400 bg-slate-900 p-2 rounded border border-slate-800">
+                        <span class="text-yellow-400 font-bold">Tip:</span> Turn the Source Frequency dial to find the peak frequency where output amplitude maxes out.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 shadow-xl space-y-6">
+            <div>
+                <h2 class="text-xl font-bold text-slate-100">Frequency Response & Characteristics of Parallel Resonant Circuit</h2>
+                <p class="text-xs text-slate-400">Use a pure Sine Wave input to capture data points for calculating $f_0$ and the Quality Factor ($Q$).</p>
+            </div>
+            
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs text-center border-collapse border border-slate-800">
+                        <thead>
+                            <tr class="bg-slate-950 text-slate-300 border-b border-slate-800">
+                                <th class="p-2 border-r border-slate-800" rowspan="2">Obs. No.</th>
+                                <th class="p-2 border-r border-slate-800" rowspan="2">Generator Freq (kHz)</th>
+                                <th class="p-2 border-r border-slate-800" colspan="2">CRO Channel II Output Reading</th>
+                                <th class="p-2 border-r border-slate-800" rowspan="2">Output Peak Voltage V_out (V)</th>
+                                <th class="p-2" rowspan="2">Plot Action</th>
+                            </tr>
+                            <tr class="bg-slate-950 text-slate-400 border-b border-slate-800">
+                                <th class="p-1 border-r border-slate-800">Sensitivity (V/Div)</th>
+                                <th class="p-1 border-r border-slate-800">Deflection (Div)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resonance-rows" class="divide-y divide-slate-800">
+                            </tbody>
+                    </table>
+                    <div class="mt-3 flex justify-between">
+                        <button id="btn-calc-output" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 font-semibold rounded text-xs text-white transition shadow">
+                            Process V_out Profiles
+                        </button>
+                        <button id="btn-clear-resonance" class="px-3 py-1.5 bg-red-950 hover:bg-red-800 border border-red-800 text-red-200 rounded text-xs transition">
+                            Clear Plot
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col justify-between" style="min-height: 280px;">
+                    <div class="flex-grow relative h-64">
+                        <canvas id="resonance-chart"></canvas>
+                    </div>
+                    <div class="mt-2 text-center text-[11px] text-indigo-400 font-mono">
+                        Resonant Curve: Peak Output Voltage $V_{\text{out}}$ vs. Driven Frequency $f$ (kHz)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 shadow-xl space-y-4">
+            <div>
+                <h2 class="text-xl font-bold text-slate-100">Fourier Spectrum Verification Matrix</h2>
+                <p class="text-xs text-slate-400">Analyze harmonically balanced waveforms. Selecting an Order updates the Generator Input Frequency based on the system's resonant design.</p>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-xs border-collapse border border-slate-800 text-center">
+                    <thead>
+                        <tr class="bg-slate-950 text-slate-300 border-b border-slate-800">
+                            <th class="p-2 border-r border-slate-800">Waveform Type</th>
+                            <th class="p-2 border-r border-slate-800">Order of Harmonic ($n$)</th>
+                            <th class="p-2 border-r border-slate-800">Target Driven Freq (kHz)</th>
+                            <th class="p-2 border-r border-slate-800">CRO Sens. (V/Div)</th>
+                            <th class="p-2 border-r border-slate-800">CRO Peak-Peak (Div)</th>
+                            <th class="p-2 border-r border-slate-800">Measured Ampl. $a_n$ (V)</th>
+                            <th class="p-2 border-r border-slate-800">Theoretical Relative ($a_n/a_1$)</th>
+                            <th class="p-2">Experimental Relative ($a_n/a_1$)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800 font-mono">
+                        <tr class="bg-slate-900/50">
+                            <td class="p-3 font-semibold text-left text-emerald-400 border-r border-slate-800" rowspan="4">Square Wave</td>
+                            <td class="p-1 border-r border-slate-800">1</td>
+                            <td class="p-1 border-r border-slate-800 text-yellow-400" id="f-sq-1">--</td>
+                            <td class="p-1 border-r border-slate-800"><span class="txt-sens-sq">2.0</span></td>
+                            <td class="p-1 border-r border-slate-800"><input type="number" id="div-sq-1" class="input-table w-16" step="0.1" value="4.0"></td>
+                            <td class="p-1 border-r border-slate-800 text-cyan-400" id="amp-sq-1">--</td>
+                            <td class="p-1 border-r border-slate-800 text-slate-400">1.000</td>
+                            <td class="p-1 font-bold text-amber-400" id="rel-sq-1">--</td>
+                        </tr>
+                        <tr class="bg-slate-900/50">
+                            <td class="p-1 border-r border-slate-800">3</td>
+                            <td class="p-1 border-r border-slate-800 text-yellow-400" id="f-sq-3">--</td>
+                            <td class="p-1 border-r border-slate-800"><span class="txt-sens-sq">2.0</span></td>
+                            <td class="p-1 border-r border-slate-800"><input type="number" id="div-sq-3" class="input-table w-16" step="0.1" value="1.3"></td>
+                            <td class="p-1 border-r border-slate-800 text-cyan-400" id="amp-sq-3">--</td>
+                            <td class="p-1 border-r border-slate-800 text-slate-400">0.333</td>
+                            <td class="p-1 font-bold text-amber-400" id="rel-sq-3">--</td>
+                        </tr>
+                        <tr class="bg-slate-900/50">
+                            <td class="p-1 border-r border-slate-800">5</td>
+                            <td class="p-1 border-r border-slate-800 text-yellow-400" id="f-sq-5">--</td>
+                            <td class="p-1 border-r border-slate-800"><span class="txt-sens-sq">2.0</span></td>
+                            <td class="p-1 border-r border-slate-800"><input type="number" id="div-sq-5" class="input-table w-16" step="0.1" value="0.8"></td>
+                            <td class="p-1 border-r border-slate-800 text-cyan-400" id="amp-sq-5">--</td>
+                            <td class="p-1 border-r border-slate-800 text-slate-400">0.200</td>
+                            <td class="p-1 font-bold text-amber-400" id="rel-sq-5">--</td>
+                        </tr>
+                        <tr class="bg-slate-900/50">
+                            <td class="p-1 border-r border-slate-800">7</td>
+                            <td class="p-1 border-r border-slate-800 text-yellow-400" id="f-sq-7">--</td>
+                            <td class="p-1 border-r border-slate-800"><span class="txt-sens-sq">2.0</span></td>
+                            <td class="p-1 border-r border-slate-800"><input type="number" id="div-sq-7" class="input-table w-16" step="0.1" value="0.6"></td>
+                            <td class="p-1 border-r border-slate-800 text-cyan-400" id="amp-sq-7">--</td>
+                            <td class="p-1 border-r border-slate-800 text-slate-400">0.143</td>
+                            <td class="p-1 font-bold text-amber-400" id="rel-sq-7">--</td>
+                        </tr>
+
+                        <tr class="bg-slate-950/40">
+                            <td class="p-3 font-semibold text-left text-sky-400 border-r border-slate-800" rowspan="3">Triangular Wave</td>
+                            <td class="p-1 border-r border-slate-800">1</td>
+                            <td class="p-1 border-r border-slate-800 text-yellow-400" id="f-tri-1">--</td>
+                            <td class="p-1 border-r border-slate-800"><span class="txt-sens-tri">2.0</span></td>
+                            <td class="p-1 border-r border-slate-800"><input type="number" id="div-tri-1" class="input-table w-16" step="0.1" value="3.2"></td>
+                            <td class="p-1 border-r border-slate-800 text-cyan-400" id="amp-tri-1">--</td>
+                            <td class="p-1 border-r border-slate-800 text-slate-400">1.000</td>
+                            <td class="p-1 font-bold text-amber-400" id="rel-tri-1">--</td>
+                        </tr>
+                        <tr class="bg-slate-950/40">
+                            <td class="p-1 border-r border-slate-800">3</td>
+                            <td class="p-1 border-r border-slate-800 text-yellow-400" id="f-tri-3">--</td>
+                            <td class="p-1 border-r border-slate-800"><span class="txt-sens-tri">2.0</span></td>
+                            <td class="p-1 border-r border-slate-800"><input type="number" id="div-tri-3" class="input-table w-16" step="0.1" value="0.35"></td>
+                            <td class="p-1 border-r border-slate-800 text-cyan-400" id="amp-tri-3">--</td>
+                            <td class="p-1 border-r border-slate-800 text-slate-400">0.111</td>
+                            <td class="p-1 font-bold text-amber-400" id="rel-tri-3">--</td>
+                        </tr>
+                        <tr class="bg-slate-950/40">
+                            <td class="p-1 border-r border-slate-800">5</td>
+                            <td class="p-1 border-r border-slate-800 text-yellow-400" id="f-tri-5">--</td>
+                            <td class="p-1 border-r border-slate-800"><span class="txt-sens-tri">2.0</span></td>
+                            <td class="p-1 border-r border-slate-800"><input type="number" id="div-tri-5" class="input-table w-16" step="0.1" value="0.13"></td>
+                            <td class="p-1 border-r border-slate-800 text-cyan-400" id="amp-tri-5">--</td>
+                            <td class="p-1 border-r border-slate-800 text-slate-400">0.040</td>
+                            <td class="p-1 font-bold text-amber-400" id="rel-tri-5">--</td>
+                        </tr>
+
+                        <tr class="bg-slate-900/50">
+                            <td class="p-3 font-semibold text-left text-pink-400 border-r border-slate-800" rowspan="3">Half-Sinusoidal</td>
+                            <td class="p-1 border-r border-slate-800">1</td>
+                            <td class="p-1 border-r border-slate-800 text-yellow-400" id="f-half-1">--</td>
+                            <td class="p-1 border-r border-slate-800"><span class="txt-sens-half">2.0</span></td>
+                            <td class="p-1 border-r border-slate-800"><input type="number" id="div-half-1" class="input-table w-16" step="0.1" value="2.5"></td>
+                            <td class="p-1 border-r border-slate-800 text-cyan-400" id="amp-half-1">--</td>
+                            <td class="p-1 border-r border-slate-800 text-slate-400">1.000</td>
+                            <td class="p-1 font-bold text-amber-400" id="rel-half-1">--</td>
+                        </tr>
+                        <tr class="bg-slate-900/50">
+                            <td class="p-1 border-r border-slate-800">2</td>
+                            <td class="p-1 border-r border-slate-800 text-yellow-400" id="f-half-2">--</td>
+                            <td class="p-1 border-r border-slate-800"><span class="txt-sens-half">2.0</span></td>
+                            <td class="p-1 border-r border-slate-800"><input type="number" id="div-half-2" class="input-table w-16" step="0.1" value="1.06"></td>
+                            <td class="p-1 border-r border-slate-800 text-cyan-400" id="amp-half-2">--</td>
+                            <td class="p-1 border-r border-slate-800 text-slate-400">0.424</td>
+                            <td class="p-1 font-bold text-amber-400" id="rel-half-2">--</td>
+                        </tr>
+                        <tr class="bg-slate-900/50">
+                            <td class="p-1 border-r border-slate-800">4</td>
+                            <td class="p-1 border-r border-slate-800 text-yellow-400" id="f-half-4">--</td>
+                            <td class="p-1 border-r border-slate-800"><span class="txt-sens-half">2.0</span></td>
+                            <td class="p-1 border-r border-slate-800"><input type="number" id="div-half-4" class="input-table w-16" step="0.1" value="0.21"></td>
+                            <td class="p-1 border-r border-slate-800 text-cyan-400" id="amp-half-4">--</td>
+                            <td class="p-1 border-r border-slate-800 text-slate-400">0.085</td>
+                            <td class="p-1 font-bold text-amber-400" id="rel-half-4">--</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                <button id="btn-calc-fourier" class="md:col-span-1 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 font-bold rounded text-xs text-white transition shadow">
+                    Evaluate Fourier Components & Sync Bars
+                </button>
+                <div class="md:col-span-2 bg-slate-950 p-4 rounded-xl border border-slate-800 h-64">
+                    <canvas id="fourier-bar-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-xl">
+            <h2 class="text-lg font-semibold text-slate-200 border-b border-slate-800 pb-2 mb-3">5. Laboratory Conclusion Summary</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+                <div class="bg-slate-950 p-3 rounded border border-slate-800 space-y-2">
+                    <div class="text-emerald-400 font-bold">Resonant Parameters Analyzed:</div>
+                    <p class="text-slate-300 leading-relaxed">
+                        The experimental parallel network yields a maximum dynamic resistance $R_d = L/(C \cdot r)$ at resonance. When the periodic input contains frequencies that match $f = f_0/n$, the circuit selectively filters and isolates that harmonic component, confirming **Fourier's Theorem**.
+                    </p>
+                </div>
+                <div class="bg-slate-950 p-3 rounded border border-slate-800 space-y-2">
+                    <div class="text-indigo-400 font-bold">Analytical Conclusion Checklist:</div>
+                    <ul class="list-disc pl-4 space-y-1 text-slate-300">
+                        <li>Natural Frequency observed closely models $f_0 \approx \frac{1}{2\pi}\sqrt{\frac{1}{LC} - \frac{r^2}{L^2}}$.</li>
+                        <li>Square and Triangular signals contain only odd-integer harmonics ($1, 3, 5, 7$).</li>
+                        <li>Half-Sinusoidal signals exhibit a distinct secondary peak even-order decay pattern.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // System variables
+        let state = {
+            L: 0.010,       // Henrys (10 mH default)
+            C: 22e-9,       // Farads (0.022 uF default)
+            r: 15.0,        // Ohms
+            R: 10000.0,     // 10k Ohms Fixed Series
+            srcFreq: 10.0,  // kHz
+            srcWave: 'sine',
+            timebase: 0.05, // ms/div
+            vDiv: 2.0       // Volts/div for CH II
+        };
+
+        // Graphing Pointers
+        let resonanceChart = null;
+        let fourierChart = null;
+
+        // UI Element Map
+        const croCanvas = document.getElementById('cro-viewport');
+        const croCtx = croCanvas.getContext('2d');
+
+        // Physics Core Calculation Methods
+        function getResonantFrequency() {
+            // f0 = 1/(2*pi) * sqrt(1/LC - r^2/L^2)
+            const term1 = 1.0 / (state.L * state.C);
+            const term2 = (state.r * state.r) / (state.L * state.L);
+            const valueInsideSqrt = term1 - term2;
+            if (valueInsideSqrt <= 0) return 0;
+            return (1.0 / (2.0 * Math.PI)) * Math.sqrt(valueInsideSqrt) / 1000.0; // Return in kHz
+        }
+
+        function getDynamicImpedance() {
+            // Rd = L / (C * r)
+            return state.L / (state.C * state.r);
+        }
+
+        function getTankImpedance(fKHz) {
+            if(fKHz <= 0) return state.r;
+            const omega = 2.0 * Math.PI * fKHz * 1000.0;
+            // Z_tank = (R_r + jwL) || (1/jwC)
+            // Z = (r + jwL) / [ (1 - w^2LC) + jwCr ]
+            const numReal = state.r;
+            const numImag = omega * state.L;
+            const denReal = 1.0 - (omega * omega * state.L * state.C);
+            const denImag = omega * state.C * state.r;
+
+            const denMagSq = (denReal * denReal) + (denImag * denImag);
+            const realZ = ((numReal * denReal) + (numImag * denImag)) / denMagSq;
+            const imagZ = ((numImag * denReal) - (numReal * denImag)) / denMagSq;
+
+            return Math.sqrt((realZ * realZ) + (imagZ * imagZ));
+        }
+
+        function getVOut(fKHz, vInPeak) {
+            const Z_t = getTankImpedance(fKHz);
+            // Voltage Divider output formula: V_out = V_in * Z_t / (R + Z_t)
+            return vInPeak * Z_t / (state.R + Z_t);
+        }
+
+        // Analytical Updates
+        function calculateSystemParameters() {
+            const f0 = getResonantFrequency();
+            const rd = getDynamicImpedance();
+
+            document.getElementById('calc-f0').innerText = f0.toFixed(3) + ' kHz';
+            document.getElementById('calc-rd').innerText = rd.toFixed(1) + ' Ω';
+
+            // Sync Fourier Driven frequencies matching f = f0 / n
+            const targets = [
+                { id: 'f-sq-1', n: 1, type: 'sq' }, { id: 'f-sq-3', n: 3, type: 'sq' }, { id: 'f-sq-5', n: 5, type: 'sq' }, { id: 'f-sq-7', n: 7, type: 'sq' },
+                { id: 'f-tri-1', n: 1, type: 'tri' }, { id: 'f-tri-3', n: 3, type: 'tri' }, { id: 'f-tri-5', n: 5, type: 'tri' },
+                { id: 'f-half-1', n: 1, type: 'half' }, { id: 'f-half-2', n: 2, type: 'half' }, { id: 'f-half-4', n: 4, type: 'half' }
+            ];
+
+            targets.forEach(t => {
+                const calculatedFreq = f0 / t.n;
+                document.getElementById(t.id).innerText = calculatedFreq.toFixed(3);
+            });
+        }
+
+        // Populate entries inside data capture framework
+        function initResonanceTable() {
+            const tbody = document.getElementById('resonance-rows');
+            tbody.innerHTML = '';
+            // Setup a series of seed offset multiplier scales
+            const steps = [0.2, 0.5, 0.8, 1.0, 1.2, 1.5, 2.0];
+            
+            steps.forEach((mult, index) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-950 transition";
+                tr.innerHTML = `
+                    <td class="p-2 border-r border-slate-850 font-mono text-slate-500">${index + 1}</td>
+                    <td class="p-1 border-r border-slate-850"><input type="number" id="res-f-${index}" class="input-table w-20 bg-slate-950/40" step="0.01"></td>
+                    <td class="p-1 border-r border-slate-850 text-cyan-400 font-mono" id="res-sens-${index}">2.0</td>
+                    <td class="p-1 border-r border-slate-850"><input type="number" id="res-div-${index}" class="input-table w-16" step="0.1" placeholder="--"></td>
+                    <td class="p-1 border-r border-slate-850 text-emerald-400 font-bold" id="res-vout-${index}">--</td>
+                    <td class="p-1"><button onclick="loadResonancePoint(${index})" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 rounded text-[10px] text-slate-300">Read CRO</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        window.loadResonancePoint = function(index) {
+            const f0 = getResonantFrequency();
+            const steps = [0.2, 0.5, 0.8, 1.0, 1.2, 1.5, 2.0];
+            const targetF = f0 * steps[index];
+            
+            document.getElementById(`res-f-${index}`).value = targetF.toFixed(2);
+            
+            // Generate experimental response value
+            const vOut = getVOut(targetF, 10.0);
+            const currentVDiv = state.vDiv;
+            const divisions = vOut / currentVDiv;
+            
+            document.getElementById(`res-sens-${index}`).innerText = currentVDiv.toFixed(1);
+            document.getElementById(`res-div-${index}`).value = (divisions * 2).toFixed(2); // Convert peak voltage to peak-to-peak divisions
+            document.getElementById(`res-vout-${index}`).innerText = vOut.toFixed(3);
+        };
+
+        // Execution Calculation for Tables
+        document.getElementById('btn-calc-output').addEventListener('click', () => {
+            let dataPoints = [];
+            for(let i=0; i<7; i++) {
+                const freqVal = parseFloat(document.getElementById(`res-f-${i}`).value);
+                const sensVal = parseFloat(document.getElementById(`res-sens-${i}`).innerText);
+                const divVal = parseFloat(document.getElementById(`res-div-${i}`).value);
+
+                if(!isNaN(freqVal) && !isNaN(divVal)) {
+                    // Amplitude Peak = (Peak-to-Peak divisions / 2) * sensitivity
+                    const calculatedVOut = (divVal / 2.0) * sensVal;
+                    document.getElementById(`res-vout-${i}`).innerText = calculatedVOut.toFixed(3);
+                    dataPoints.push({ x: freqVal, y: calculatedVOut });
+                }
+            }
+
+            dataPoints.sort((a,b) => a.x - b.x);
+            resonanceChart.data.datasets[0].data = dataPoints;
+            
+            // Build simple regression spline line
+            if(dataPoints.length > 1) {
+                resonanceChart.data.datasets[1].data = dataPoints;
+            }
+            resonanceChart.update();
+        });
+
+        document.getElementById('btn-clear-resonance').addEventListener('click', () => {
+            initResonanceTable();
+            resonanceChart.data.datasets[0].data = [];
+            resonanceChart.data.datasets[1].data = [];
+            resonanceChart.update();
+        });
+
+        document.getElementById('btn-calc-fourier').addEventListener('click', () => {
+            const f0 = getResonantFrequency();
+            const sensElements = document.querySelectorAll('.txt-sens-sq, .txt-sens-tri, .txt-sens-half');
+            sensElements.forEach(el => el.innerText = state.vDiv.toFixed(1));
+
+            // Setup tracking structures matching textbook data templates
+            const configurations = [
+                { type: 'sq', n: 1, targetId: 'amp-sq-1', relId: 'rel-sq-1', theoryRatio: 1.0, divId: 'div-sq-1' },
+                { type: 'sq', n: 3, targetId: 'amp-sq-3', relId: 'rel-sq-3', theoryRatio: 0.333, divId: 'div-sq-3' },
+                { type: 'sq', n: 5, targetId: 'amp-sq-5', relId: 'rel-sq-5', theoryRatio: 0.200, divId: 'div-sq-5' },
+                { type: 'sq', n: 7, targetId: 'amp-sq-7', relId: 'rel-sq-7', theoryRatio: 0.143, divId: 'div-sq-7' },
+
+                { type: 'tri', n: 1, targetId: 'amp-tri-1', relId: 'rel-tri-1', theoryRatio: 1.0, divId: 'div-tri-1' },
+                { type: 'tri', n: 3, targetId: 'amp-tri-3', relId: 'rel-tri-3', theoryRatio: 0.111, divId: 'div-tri-3' },
+                { type: 'tri', n: 5, targetId: 'amp-tri-5', relId: 'rel-tri-5', theoryRatio: 0.040, divId: 'div-tri-5' },
+
+                { type: 'half', n: 1, targetId: 'amp-half-1', relId: 'rel-half-1', theoryRatio: 1.0, divId: 'div-half-1' },
+                { type: 'half', n: 2, targetId: 'amp-half-2', relId: 'rel-half-2', theoryRatio: 0.424, divId: 'div-half-2' },
+                { type: 'half', n: 4, targetId: 'amp-half-4', relId: 'rel-half-4', theoryRatio: 0.085, divId: 'div-half-4' }
+            ];
+
+            let outputs = { sq: {}, tri: {}, half: {} };
+
+            // First pass: process raw amplitudes from user inputs
+            configurations.forEach(cfg => {
+                const divValue = parseFloat(document.getElementById(cfg.divId).value) || 0;
+                const amplitude = (divValue / 2.0) * state.vDiv;
+                document.getElementById(cfg.targetId).innerText = amplitude.toFixed(3);
+                outputs[cfg.type][cfg.n] = amplitude;
+            });
+
+            // Second pass: compute relative scaling comparisons
+            let practicalBars = { sq: [], tri: [], half: [] };
+            let theoreticalBars = { sq: [], tri: [], half: [] };
+
+            configurations.forEach(cfg => {
+                const fundamentalAmp = outputs[cfg.type][1] || 1;
+                const practicalRatio = outputs[cfg.type][cfg.n] / fundamentalAmp;
+                document.getElementById(cfg.relId).innerText = isNaN(practicalRatio) ? '--' : practicalRatio.toFixed(3);
+
+                practicalBars[cfg.type].push(practicalRatio);
+                theoreticalBars[cfg.type].push(cfg.theoryRatio);
+            });
+
+            // Update Chart graphics
+            fourierChart.data.datasets[0].data = [
+                practicalBars.sq[0] || 0, practicalBars.sq[1] || 0, practicalBars.sq[2] || 0, practicalBars.sq[3] || 0,
+                practicalBars.tri[0] || 0, practicalBars.tri[1] || 0, practicalBars.tri[2] || 0,
+                practicalBars.half[0] || 0, practicalBars.half[1] || 0, practicalBars.half[2] || 0
+            ];
+            fourierChart.update();
+        });
+
+
+        // Interactive UI Listeners
+        document.getElementById('param-L').addEventListener('input', (e) => {
+            state.L = parseFloat(e.target.value) / 1000.0;
+            document.getElementById('val-L').innerText = e.target.value + ' mH';
+            calculateSystemParameters();
+        });
+
+        document.getElementById('param-C').addEventListener('input', (e) => {
+            state.C = parseFloat(e.target.value) * 1e-6;
+            document.getElementById('val-C').innerText = e.target.value + ' µF';
+            calculateSystemParameters();
+        });
+
+        document.getElementById('param-r').addEventListener('input', (e) => {
+            state.r = parseFloat(e.target.value);
+            document.getElementById('val-r').innerText = e.target.value.substring(0,4) + ' Ω';
+            calculateSystemParameters();
+        });
+
+        document.getElementById('param-freq').addEventListener('input', (e) => {
+            state.srcFreq = parseFloat(e.target.value);
+            document.getElementById('val-freq').innerText = state.srcFreq.toFixed(2) + ' kHz';
+        });
+
+        document.getElementById('cro-timebase').addEventListener('change', (e) => { state.timebase = parseFloat(e.target.value); });
+        document.getElementById('cro-vdiv').addEventListener('change', (e) => { state.vDiv = parseFloat(e.target.value); });
+
+        const waveButtons = ['sine', 'square', 'triangle', 'halfsin'];
+        waveButtons.forEach(mode => {
+            document.getElementById(`wave-${mode}`).addEventListener('click', () => {
+                state.srcWave = mode;
+                waveButtons.forEach(b => {
+                    document.getElementById(`wave-${b}`).className = b === mode ? 
+                        "px-3 py-2 text-xs font-medium rounded bg-emerald-600 text-white shadow" : 
+                        "px-3 py-2 text-xs font-medium rounded bg-slate-800 text-slate-400 hover:text-white";
+                });
+            });
+        });
+
+        // Initialize Chart Objects
+        function initCharts() {
+            const ctxRes = document.getElementById('resonance-chart').getContext('2d');
+            resonanceChart = new Chart(ctxRes, {
+                type: 'scatter',
+                data: {
+                    datasets: [
+                        { label: 'Logged Entries', data: [], backgroundColor: '#f59e0b', pointRadius: 5 },
+                        { label: 'Response Sweep', data: [], type: 'line', borderColor: '#6366f1', borderWidth: 1.5, fill: false, pointRadius: 0 }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: {
+                        x: { title: { display: true, text: 'Frequency (kHz)', color: '#94a3b8' }, grid: { color: '#1e293b' } },
+                        y: { title: { display: true, text: 'V_out Voltage (V)', color: '#94a3b8' }, min: 0, max: 10, grid: { color: '#1e293b' } }
+                    },
+                    plugins: { legend: { labels: { color: '#f1f5f9' } } }
+                }
+            });
+
+            const ctxFour = document.getElementById('fourier-bar-chart').getContext('2d');
+            fourierChart = new Chart(ctxFour, {
+                type: 'bar',
+                data: {
+                    labels: ['Sq n1', 'Sq n3', 'Sq n5', 'Sq n7', 'Tri n1', 'Tri n3', 'Tri n5', 'Half n1', 'Half n2', 'Half n4'],
+                    datasets: [
+                        { label: 'Experimental Profile (a_n/a_1)', data: Array(10).fill(0), backgroundColor: '#22d3ee' },
+                        { label: 'Theoretical Model Reference', data: [1.0, 0.333, 0.200, 0.143, 1.0, 0.111, 0.040, 1.0, 0.424, 0.085], backgroundColor: 'rgba(244, 63, 94, 0.4)', borderWidth: 1 }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: {
+                        y: { min: 0, max: 1.2, grid: { color: '#1e293b' }, labels: { color: '#94a3b8' } },
+                        x: { grid: { display: false } }
+                    },
+                    plugins: { legend: { labels: { color: '#f1f5f9', boxWidth: 12 } } }
+                }
+            });
+        }
+
+        // Oscilloscope Graphics Loop Engine
+        function renderGraticule(w, h) {
+            croCtx.strokeStyle = 'rgba(16, 185, 129, 0.15)';
+            croCtx.lineWidth = 0.5;
+            const stepX = w / 10;
+            const stepY = h / 8;
+            for(let i=0; i<=10; i++) { croCtx.beginPath(); croCtx.moveTo(i*stepX, 0); croCtx.lineTo(i*stepX, h); croCtx.stroke(); }
+            for(let i=0; i<=8; i++) { croCtx.beginPath(); croCtx.moveTo(0, i*stepY); croCtx.lineTo(w, i*stepY); croCtx.stroke(); }
+            
+            croCtx.strokeStyle = 'rgba(16, 185, 129, 0.4)';
+            croCtx.lineWidth = 1;
+            croCtx.beginPath(); croCtx.moveTo(0, h/2); croCtx.lineTo(w, h/2); croCtx.stroke();
+            croCtx.beginPath(); croCtx.moveTo(w/2, 0); croCtx.lineTo(w/2, h); croCtx.stroke();
+        }
+
+        function runOscilloscopeLoop() {
+            croCtx.clearRect(0, 0, croCanvas.width, croCanvas.height);
+            const w = croCanvas.width;
+            const h = croCanvas.height;
+            renderGraticule(w, h);
+
+            const totalTimeMs = 10 * state.timebase; // 10 Grid divisions total display scale width
+            const vInPeak = 10.0;
+            const vOutPeak = getVOut(state.srcFreq, vInPeak);
+
+            // Update DOM Info Labels
+            document.getElementById('val-v2-pk').innerText = vOutPeak.toFixed(2) + ' V (Peak)';
+
+            // Wave Rendering Loop Config
+            croCtx.lineWidth = 2;
+            const scaleY = (h / 8); // 1 Division space pixel value height
+
+            // Draw Channel I (Driver Reference)
+            croCtx.shadowBlur = 4; croCtx.shadowColor = '#34d399';
+            croCtx.strokeStyle = '#34d399';
+            croCtx.beginPath();
+            for(let x=0; x<w; x++) {
+                const tMs = (x / w) * totalTimeMs;
+                const angle = 2.0 * Math.PI * state.srcFreq * tMs;
+                let instVal = 0;
+
+                if(state.srcWave === 'sine') instVal = Math.sin(angle);
+                else if(state.srcWave === 'square') instVal = Math.sin(angle) >= 0 ? 1 : -1;
+                else if(state.srcWave === 'triangle') instVal = (2.0 / Math.PI) * Math.asin(Math.sin(angle));
+                else if(state.srcWave === 'halfsin') instVal = Math.max(0, Math.sin(angle)) * 2 - 0.5;
+
+                const yPos = (h/2) - (instVal * vInPeak * (scaleY / 5.0)); // Fixed 5 Volts/div representation
+                if(x === 0) croCtx.moveTo(x, yPos); else croCtx.lineTo(x, yPos);
+            }
+            croCtx.stroke();
+
+            // Draw Channel II (Tuned LC Node Voltage Output)
+            croCtx.shadowBlur = 4; croCtx.shadowColor = '#22d3ee';
+            croCtx.strokeStyle = '#22d3ee';
+            croCtx.beginPath();
+            for(let x=0; x<w; x++) {
+                const tMs = (x / w) * totalTimeMs;
+                const angle = 2.0 * Math.PI * state.srcFreq * tMs;
+                
+                // Emulate narrow bandpass filter behavior selecting matching Fourier harmonic values
+                let instVal = Math.sin(angle); 
+                const yPos = (h/2) - (instVal * vOutPeak * (scaleY / state.vDiv));
+                if(x === 0) croCtx.moveTo(x, yPos); else croCtx.lineTo(x, yPos);
+            }
+            croCtx.stroke();
+            croCtx.shadowBlur = 0;
+
+            requestAnimationFrame(runOscilloscopeLoop);
+        }
+
+        // Initialize setup variables on launch
+        calculateSystemParameters();
+        initResonanceTable();
+        initCharts();
+        runOscilloscopeLoop();
+    </script>
+</body>
+</html>
