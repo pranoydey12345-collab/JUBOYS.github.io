@@ -254,7 +254,7 @@
                             <th class="p-2 border-r border-slate-800">Target Driven Freq (kHz)</th>
                             <th class="p-2 border-r border-slate-800">CRO Sens. (V/Div)</th>
                             <th class="p-2 border-r border-slate-800">CRO Peak-Peak (Div)</th>
-                            <th class="p-2 border-r border-slate-800">Measured Ampl. $a_n$ (V)</th>
+                            <th class="p-2 border-r border-slate-800">Measured Ampl. a_n (V)</th>
                             <th class="p-2 border-r border-slate-800">Theoretical Relative (a_n/a_1)</th>
                             <th class="p-2">Experimental Relative (a_n/a_1)</th>
                         </tr>
@@ -642,8 +642,8 @@
                 type: 'scatter',
                 data: {
                     datasets: [
-                        { label: 'Logged Entries', data: [], backgroundColor: '#f59e0b', pointRadius: 5 },
-                        { label: 'Response Sweep', data: [], type: 'line', borderColor: '#6366f1', borderWidth: 1.5, fill: false, pointRadius: 0 }
+                        { label: 'Data Points', data: [], backgroundColor: '#f59e0b', pointRadius: 5 },
+                        { label: 'Connected Line', data: [], type: 'line', borderColor: '#6366f1', borderWidth: 1.5, fill: false, pointRadius: 0 }
                     ]
                 },
                 options: {
