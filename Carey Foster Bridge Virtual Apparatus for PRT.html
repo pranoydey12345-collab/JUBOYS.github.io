@@ -32,6 +32,20 @@
             border-color: #3b82f6;
             box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4);
         }
+        .table-input {
+            background: #070d19;
+            border: 1px solid #334155;
+            color: #22d3ee;
+            font-family: monospace;
+            text-align: center;
+            width: 100%;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        .table-input:focus {
+            outline: none;
+            border-color: #f59e0b;
+        }
     </style>
 </head>
 <body class="min-h-screen p-4 lg:p-6">
@@ -43,10 +57,10 @@
                 <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
                     <span class="text-amber-400">⚡</span> Carey Foster Bridge Virtual Apparatus 
                 </h1>
-                <p class="text-slate-400 text-xs mt-1">High-Visibility Laboratory Assembly Map & Automatic Real-Time Linear Graphic Calculation Engine Created By Pranoy Dey And Aritra Singha Roy Student of Jadavpur University</p>
+                <p class="text-slate-400 text-xs mt-1"> Using Platinum Resistance Thermometer Find The Temperature Coefficient Of Resistance alpha Created By Pranoy Dey And Aritra Singha Roy </p>
             </div>
             <div class="px-4 py-2 bg-slate-950 border-2 border-slate-800 rounded-xl font-mono text-xs text-emerald-400 font-bold">
-               VIRTUAL LAB : Jadavpur University
+                Virtual Lab: Jadavpur University 
             </div>
         </header>
 
@@ -63,16 +77,16 @@
                         <div class="flex flex-col gap-1">
                             <label class="text-xs text-slate-300 font-medium">Experimental Configuration State:</label>
                             <select id="runMode" onchange="updateRigSimulationState()" class="custom-input w-full p-2 rounded text-xs">
-                                <option value="short">Table I: Short-Circuit Jumper Mode (Find $l_0$)</option>
-                                <option value="normal" selected>Table II: Active Thermal Balance Core (Find $l$)</option>
+                                <option value="short" selected>Table I: Both Inner/Outer Pairs Shorted (Find l_0 )</option>
+                                <option value="normal">Table II: Active Thermal Balance Core (Find l)</option>
                             </select>
                         </div>
 
                         <div class="flex flex-col gap-1">
                             <label class="text-xs text-slate-300 font-medium">Thermostat Environment:</label>
                             <select id="chamberEnv" onchange="handleEnvChange()" class="custom-input w-full p-2 rounded text-xs">
-                                <option value="room" selected>Ambient Lab Workspace</option>
-                                <option value="ice">Ice Crystal Bath (0 °C)</option>
+                                <option value="room" >Ambient Lab Workspace</option>
+                                <option value="ice"selected>Ice Crystal Bath (0 °C)</option>
                                 <option value="steam">Saturated Vapor Steam (100 °C)</option>
                             </select>
                         </div>
@@ -84,7 +98,7 @@
 
                         <div class="flex flex-col gap-1">
                             <label class="text-xs text-slate-300 font-medium">Resistance Box R_3 (Ω):</label>
-                            <input type="number" id="r3ResistanceVal" value="2" min="0" max="100" step="1" onchange="updateRigSimulationState()" class="custom-input w-full p-2 rounded text-xs">
+                            <input type="number" id="r3ResistanceVal" value="2" min="0" max="100" step="0.01" onchange="updateRigSimulationState()" class="custom-input w-full p-2 rounded text-xs">
                         </div>
 
                         <div class="flex flex-col gap-1">
@@ -106,7 +120,7 @@
 
                     <div class="flex gap-3 pt-1">
                         <button onclick="commitMeasurementRow()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs py-2.5 px-4 rounded-lg transition-colors tracking-wide">
-                            📥 Click Here To Record The Galvanometer Reading At G = 0
+                            📥 Click Here to Record The Null Point Reading when G = 0
                         </button>
                         <button onclick="clearFullSystemReset()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold text-xs py-2.5 px-4 rounded-lg transition-colors">
                             Reset Work Station
@@ -115,7 +129,7 @@
                 </div>
 
                 <div class="panel-card p-4">
-                    <h3 class="text-xs font-bold text-slate-400 mb-3 uppercase tracking-widest">📐 High Visibility Physical Wire Connections Blueprint Map</h3>
+                    <h3 class="text-xs font-bold text-slate-400 mb-3 uppercase tracking-widest"> Carey Foster Bridge Virtual Apparatus </h3>
                     <div class="bg-slate-950 rounded-xl border-2 border-slate-800 p-2 overflow-hidden flex justify-center">
                         <canvas id="schematicCanvas" width="760" height="420" class="block"></canvas>
                     </div>
@@ -127,8 +141,8 @@
                 
                 <div class="panel-card p-5 space-y-3">
                     <div class="flex justify-between items-center border-b border-slate-700 pb-2">
-                        <h2 class="text-xs font-bold text-slate-200 uppercase tracking-wider">Table 1: Midpoint Balance Calibration</h2>
-                        <span class="text-[10px] bg-amber-950 text-amber-400 px-2 py-0.5 rounded font-mono border border-amber-800">Requires Short-Circuit</span>
+                        <h2 class="text-xs font-bold text-slate-200 uppercase tracking-wider">Table 1: Midpoint Balance Calibration (Shorted)</h2>
+                        <span class="text-[10px] bg-amber-950 text-amber-400 px-2 py-0.5 rounded font-mono border border-amber-800">External Inputs Enabled</span>
                     </div>
                     <div class="overflow-x-auto rounded-lg border border-slate-800">
                         <table class="w-full text-left border-collapse text-xs">
@@ -136,24 +150,54 @@
                                 <tr class="bg-slate-800 text-slate-300 font-mono text-center border-b border-slate-700">
                                     <th class="p-2 border-r border-slate-700" rowspan="2">No.</th>
                                     <th class="p-2 border-b border-slate-700" colspan="2">Standard Arms (Ω)</th>
-                                    <th class="p-2 border-r border-slate-700 border-b border-slate-700" rowspan="2">Box $R_3$</th>
-                                    <th class="p-2 border-b border-slate-700" colspan="2">Null Point $l$ (cm)</th>
-                                    <th class="p-2" rowspan="2">Mean $l_0$</th>
+                                    <th class="p-2 border-r border-slate-700 border-b border-slate-700" rowspan="2">Box $R_3$ (Ω)</th>
+                                    <th class="p-2 border-b border-slate-700" colspan="2">Null Point l (cm)</th>
+                                    <th class="p-2" rowspan="2">Mean l_0</th>
                                 </tr>
                                 <tr class="bg-slate-800 text-slate-400 font-mono text-[10px] text-center border-b border-slate-700">
-                                    <th class="p-1 border-r border-slate-700">Left ($P$)</th>
-                                    <th class="p-1 border-r border-slate-700">Right ($Q$)</th>
-                                    <th class="p-1 border-r border-slate-700">Direct ($m$)</th>
-                                    <th class="p-1">Reverse ($n$)</th>
+                                    <th class="p-1 border-r border-slate-700">Left (P)</th>
+                                    <th class="p-1 border-r border-slate-700">Right (Q)</th>
+                                    <th class="p-1 border-r border-slate-700">Direct (m)</th>
+                                    <th class="p-1">Reverse (n)</th>
                                 </tr>
                             </thead>
                             <tbody id="table1DataLines" class="divide-y divide-slate-800 bg-slate-900/30 text-center font-mono text-cyan-400">
-                                </tbody>
+                                <tr class="border-b border-slate-800 hover:bg-slate-800/30">
+                                    <td class="p-2 border-r border-slate-800 text-slate-500 font-bold">1</td>
+                                    <td class="border-r border-slate-800">1</td>
+                                    <td class="border-r border-slate-800">1</td>
+                                    <td class="border-r border-slate-800 p-1"><input type="number" step="0.01" id="t1-r3-1" value="2.00" class="table-input font-bold !text-slate-200"></td>
+                                    <td class="border-r border-slate-800 p-1"><input type="number" step="0.01" id="t1-m-1" class="table-input" placeholder="-"></td>
+                                    <td class="border-r border-slate-800 p-1"><input type="number" step="0.01" id="t1-n-1" class="table-input" placeholder="-"></td>
+                                    <td class="font-bold text-yellow-400" id="t1-l0-1">-</td>
+                                </tr>
+                                <tr class="border-b border-slate-800 hover:bg-slate-800/30">
+                                    <td class="p-2 border-r border-slate-800 text-slate-500 font-bold">2</td>
+                                    <td class="border-r border-slate-800">1</td>
+                                    <td class="border-r border-slate-800">1</td>
+                                    <td class="border-r border-slate-800 p-1"><input type="number" step="0.01" id="t1-r3-2" value="3.00" class="table-input font-bold !text-slate-200"></td>
+                                    <td class="border-r border-slate-800 p-1"><input type="number" step="0.01" id="t1-m-2" class="table-input" placeholder="-"></td>
+                                    <td class="border-r border-slate-800 p-1"><input type="number" step="0.01" id="t1-n-2" class="table-input" placeholder="-"></td>
+                                    <td class="font-bold text-yellow-400" id="t1-l0-2">-</td>
+                                </tr>
+                                <tr class="border-b border-slate-800 hover:bg-slate-800/30">
+                                    <td class="p-2 border-r border-slate-800 text-slate-500 font-bold">3</td>
+                                    <td class="border-r border-slate-800">1</td>
+                                    <td class="border-r border-slate-800">1</td>
+                                    <td class="border-r border-slate-800 p-1"><input type="number" step="0.01" id="t1-r3-3" value="4.00" class="table-input font-bold !text-slate-200"></td>
+                                    <td class="border-r border-slate-800 p-1"><input type="number" step="0.01" id="t1-m-3" class="table-input" placeholder="-"></td>
+                                    <td class="border-r border-slate-800 p-1"><input type="number" step="0.01" id="t1-n-3" class="table-input" placeholder="-"></td>
+                                    <td class="font-bold text-yellow-400" id="t1-l0-3">-</td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
+                    <button onclick="calculateTable1Midpoint()" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold text-xs py-2 px-4 rounded-lg transition-colors tracking-wide uppercase">
+                        ⚙️ Compute Electrical Midpoint (l_0)
+                    </button>
                     <div class="p-3 bg-slate-900 rounded-lg border border-slate-800 flex justify-between items-center text-xs font-mono">
-                        <span class="text-slate-400">Evaluated Base Bridge Midpoint ($l_0$):</span>
-                        <span id="l0OutputValue" class="font-bold text-yellow-400 text-sm">-- cm</span>
+                        <span class="text-slate-400">Evaluated Base Bridge Midpoint (l_0):</span>
+                        <span id="l0OutputValue" class="font-bold text-yellow-400 text-sm">50.25 cm (Preset)</span>
                     </div>
                 </div>
 
@@ -165,19 +209,43 @@
                         <table class="w-full text-center border-collapse text-xs">
                             <thead>
                                 <tr class="bg-slate-800 text-slate-300 font-mono border-b border-slate-700">
-                                    <th class="p-2 border-r border-slate-700">Resistance Box $R_3$ (Ω)</th>
-                                    <th class="p-2 border-r border-slate-700">Room Temp ($T_{room}$)</th>
+                                    <th class="p-2 border-r border-slate-700">Resistance Box R_3 (Ω)</th>
+                                    <th class="p-2 border-r border-slate-700">Room Temp (T_{room})</th>
                                     <th class="p-2 border-r border-slate-700">Ice Crystal (0 °C)</th>
                                     <th class="p-2">Boiling Steam (100 °C)</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-800 bg-slate-900/30 font-mono text-cyan-400">
-                                <tr id="row-r2"><td class="p-2 bg-slate-800/40 font-bold border-r border-slate-700 text-slate-300">2 Ω</td><td class="cell-room">-</td><td class="cell-ice">-</td><td class="cell-steam">-</td></tr>
-                                <tr id="row-r3"><td class="p-2 bg-slate-800/40 font-bold border-r border-slate-700 text-slate-300">3 Ω</td><td class="cell-room">-</td><td class="cell-ice">-</td><td class="cell-steam">-</td></tr>
-                                <tr id="row-r4"><td class="p-2 bg-slate-800/40 font-bold border-r border-slate-700 text-slate-300">4 Ω</td><td class="cell-room">-</td><td class="cell-ice">-</td><td class="cell-steam">-</td></tr>
+                                <tr id="row-r1">
+                                    <td class="p-2 bg-slate-800/40 font-bold border-r border-slate-700 text-slate-300">
+                                        <input type="number" step="0.01" id="t2-r3-label-1" value="2.00" class="bg-transparent text-center text-slate-300 w-12 focus:outline-none"> Ω
+                                    </td>
+                                    <td class="p-1 border-r border-slate-700"><input type="number" step="0.01" id="t2-room-1" class="table-input" placeholder="-"></td>
+                                    <td class="p-1 border-r border-slate-700"><input type="number" step="0.01" id="t2-ice-1" class="table-input" placeholder="-"></td>
+                                    <td class="p-1"><input type="number" step="0.01" id="t2-steam-1" class="table-input" placeholder="-"></td>
+                                </tr>
+                                <tr id="row-r2">
+                                    <td class="p-2 bg-slate-800/40 font-bold border-r border-slate-700 text-slate-300">
+                                        <input type="number" step="0.01" id="t2-r3-label-2" value="3.00" class="bg-transparent text-center text-slate-300 w-12 focus:outline-none"> Ω
+                                    </td>
+                                    <td class="p-1 border-r border-slate-700"><input type="number" step="0.01" id="t2-room-2" class="table-input" placeholder="-"></td>
+                                    <td class="p-1 border-r border-slate-700"><input type="number" step="0.01" id="t2-ice-2" class="table-input" placeholder="-"></td>
+                                    <td class="p-1"><input type="number" step="0.01" id="t2-steam-2" class="table-input" placeholder="-"></td>
+                                </tr>
+                                <tr id="row-r3">
+                                    <td class="p-2 bg-slate-800/40 font-bold border-r border-slate-700 text-slate-300">
+                                        <input type="number" step="0.01" id="t2-r3-label-3" value="4.00" class="bg-transparent text-center text-slate-300 w-12 focus:outline-none"> Ω
+                                    </td>
+                                    <td class="p-1 border-r border-slate-700"><input type="number" step="0.01" id="t2-room-3" class="table-input" placeholder="-"></td>
+                                    <td class="p-1 border-r border-slate-700"><input type="number" step="0.01" id="t2-ice-3" class="table-input" placeholder="-"></td>
+                                    <td class="p-1"><input type="number" step="0.01" id="t2-steam-3" class="table-input" placeholder="-"></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
+                    <button onclick="calculateManualDatasetMatrix()" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs py-3 px-4 rounded-lg transition-colors tracking-wide shadow-lg uppercase">
+                        ⚙️ Compute Dataset & Update Graphs
+                    </button>
                 </div>
 
                 <div class="space-y-4">
@@ -189,21 +257,37 @@
                     </div>
                 </div>
 
-                <div class="panel-card p-5 space-y-3">
+                <div class="panel-card p-5 space-y-4">
                     <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-700 pb-2">
                         📊 Automatic Math Computational Analysis Report
                     </h2>
+                    
+                    <div class="grid grid-cols-3 gap-2 font-mono text-[11px]">
+                        <div class="bg-slate-900/80 p-2 rounded-lg border border-cyan-900/60 text-center">
+                            <span class="text-slate-400 block text-[9px] font-sans">Resistance at 0°C (R_0):</span>
+                            <span id="outputRes0" class="text-cyan-400 font-bold text-xs block mt-0.5">-- Ω</span>
+                        </div>
+                        <div class="bg-slate-900/80 p-2 rounded-lg border border-blue-900/60 text-center">
+                            <span class="text-slate-400 block text-[9px] font-sans">Resistance at Temp (R_t):</span>
+                            <span id="outputResRoom" class="text-blue-400 font-bold text-xs block mt-0.5">-- Ω</span>
+                        </div>
+                        <div class="bg-slate-900/80 p-2 rounded-lg border border-rose-900/60 text-center">
+                            <span class="text-slate-400 block text-[9px] font-sans">Resistance at 100°C (R_{100}):</span>
+                            <span id="outputRes100" class="text-rose-400 font-bold text-xs block mt-0.5">-- Ω</span>
+                        </div>
+                    </div>
+
                     <div class="grid grid-cols-2 gap-3 font-mono text-xs">
                         <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-                            <span class="text-slate-500 block text-[10px]">Wire Resistivity Factor ($\rho$):</span>
+                            <span class="text-slate-500 block text-[10px]">Wire Resistivity Factor (\rho):</span>
                             <span id="outputResistivityRho" class="text-emerald-400 font-bold text-sm">-- Ω/cm</span>
                         </div>
                         <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-                            <span class="text-slate-500 block text-[10px]">Thermal Coefficient ($\alpha$):</span>
+                            <span class="text-slate-500 block text-[10px]">Thermal Coefficient (\alpha):</span>
                             <span id="outputAlphaCoefficient" class="text-amber-400 font-bold text-sm">-- /°C</span>
                         </div>
                         <div class="bg-slate-900 p-3 rounded-lg border border-slate-800 col-span-2">
-                            <span class="text-slate-500 block text-[10px]">Extracted Platinum Characteristic Equation ($R_t$):</span>
+                            <span class="text-slate-500 block text-[10px]">Extracted Platinum Characteristic Equation (R_t):</span>
                             <span id="equationMathematicalDisplay" class="text-blue-400 font-bold block mt-1 text-xs">Awaiting variable matrix inputs...</span>
                         </div>
                     </div>
@@ -220,14 +304,7 @@
 
         let userSelectedJockeyCm = 50.00;
         let systemTheoreticalNullCm = 50.00;
-        let evaluatedGlobalL0 = null;
-
-        let table1MemoryArray = [];
-        let table2MatrixStorage = {
-            room:  { 2: null, 3: null, 4: null, temp: 27 },
-            ice:   { 2: null, 3: null, 4: null, temp: 0 },
-            steam: { 2: null, 3: null, 4: null, temp: 100 }
-        };
+        let evaluatedGlobalL0 = 50.25;
 
         let chartInstanceDisplacement = null;
         let chartInstanceResistanceCurve = null;
@@ -236,16 +313,16 @@
 
         window.onload = function() {
             initializeAnalysisCharts();
-            evaluatedGlobalL0 = 50.25; 
             document.getElementById('l0OutputValue').innerText = "50.25 cm (Preset)";
             updateRigSimulationState();
+            handleEnvChange();
         };
 
         function initializeAnalysisCharts() {
             chartInstanceDisplacement = new Chart(document.getElementById('lineChartDisplacement').getContext('2d'), {
                 type: 'line',
                 data: {
-                    labels: ['2 Ω', '3 Ω', '4 Ω'],
+                    labels: ['Trial 1', 'Trial 2', 'Trial 3'],
                     datasets: [
                         { label: 'Room Temp', data: [], borderColor: '#3b82f6', backgroundColor: '#3b82f6', tension: 0, fill: false },
                         { label: '0°C Ice', data: [], borderColor: '#22d3ee', backgroundColor: '#22d3ee', tension: 0, fill: false },
@@ -257,7 +334,7 @@
                     maintainAspectRatio: false,
                     plugins: { 
                         legend: { labels: { color: '#94a3b8', font: { size: 9 } } },
-                        title: { display: true, text: 'Graph 1: Displacement Value (l - l₀) vs Box R₃', color: '#f1f5f9', font: { size: 10 } }
+                        title: { display: true, text: 'Graph 1: Displacement Value (l - l₀) vs Custom Entries', color: '#f1f5f9', font: { size: 10 } }
                     },
                     scales: {
                         x: { grid: { color: '#2d3d5a' }, ticks: { color: '#94a3b8' } },
@@ -289,8 +366,14 @@
         function handleEnvChange() {
             const environment = document.getElementById('chamberEnv').value;
             const elementBox = document.getElementById('roomTempControlWrapper');
-            if (environment === 'room') elementBox.classList.remove('hidden');
-            else elementBox.classList.add('hidden');
+            const currentMode = document.getElementById('runMode').value;
+            
+            if (currentMode === 'short') {
+                elementBox.classList.add('hidden');
+            } else {
+                if (environment === 'room') elementBox.classList.remove('hidden');
+                else elementBox.classList.add('hidden');
+            }
             updateRigSimulationState();
         }
 
@@ -310,13 +393,10 @@
                 const env = envSelector.value;
                 if (env === 'ice') {
                     targetTemperature = 0;
-                    document.getElementById('roomTempControlWrapper').classList.add('hidden');
                 } else if (env === 'steam') {
                     targetTemperature = 100;
-                    document.getElementById('roomTempControlWrapper').classList.add('hidden');
                 } else {
                     targetTemperature = parseFloat(document.getElementById('roomTempBox').value) || 27;
-                    document.getElementById('roomTempControlWrapper').classList.remove('hidden');
                 }
                 
                 let dynamicRt = PRT_BASE_R0 * (1 + PRT_BASE_ALPHA * targetTemperature);
@@ -356,6 +436,128 @@
             }
         }
 
+        function commitMeasurementRow() {
+            const currentMode = document.getElementById('runMode').value;
+            const chosenR3 = parseFloat(document.getElementById('r3ResistanceVal').value) || 0;
+            const direction = document.getElementById('commutatorDirection').value;
+
+            if (Math.abs(userSelectedJockeyCm - systemTheoreticalNullCm) > 0.05) {
+                alert("Galvanometer unbalance offset recorded! Move slider until deflection reading equals exactly 0.0 div.");
+                return;
+            }
+
+            if (currentMode === 'short') {
+                let rowSlot = 1;
+                if (Math.abs(chosenR3 - parseFloat(document.getElementById('t1-r3-2').value)) < 0.5) rowSlot = 2;
+                else if (Math.abs(chosenR3 - parseFloat(document.getElementById('t1-r3-3').value)) < 0.5) rowSlot = 3;
+
+                document.getElementById(`t1-r3-${rowSlot}`).value = chosenR3.toFixed(2);
+                if (direction === 'direct') {
+                    document.getElementById(`t1-m-${rowSlot}`).value = userSelectedJockeyCm.toFixed(2);
+                } else {
+                    document.getElementById(`t1-n-${rowSlot}`).value = userSelectedJockeyCm.toFixed(2);
+                }
+            } else {
+                let rowSlot = 1;
+                if (Math.abs(chosenR3 - parseFloat(document.getElementById('t2-r3-label-2').value)) < 0.5) rowSlot = 2;
+                else if (Math.abs(chosenR3 - parseFloat(document.getElementById('t2-r3-label-3').value)) < 0.5) rowSlot = 3;
+
+                const currentEnvKey = document.getElementById('chamberEnv').value;
+                document.getElementById(`t2-${currentEnvKey}-${rowSlot}`).value = userSelectedJockeyCm.toFixed(2);
+            }
+        }
+
+        function calculateTable1Midpoint() {
+            let sumL0 = 0;
+            let l0Count = 0;
+
+            for (let i = 1; i <= 3; i++) {
+                let m = parseFloat(document.getElementById(`t1-m-${i}`).value);
+                let n = parseFloat(document.getElementById(`t1-n-${i}`).value);
+                let meanCell = document.getElementById(`t1-l0-${i}`);
+                
+                if (!isNaN(m) && !isNaN(n)) {
+                    let mean = (m + n) / 2;
+                    meanCell.innerText = mean.toFixed(2);
+                    sumL0 += mean;
+                    l0Count++;
+                } else {
+                    meanCell.innerText = "-";
+                }
+            }
+
+            evaluatedGlobalL0 = l0Count > 0 ? (sumL0 / l0Count) : 50.25;
+            document.getElementById('l0OutputValue').innerText = `${evaluatedGlobalL0.toFixed(2)} cm`;
+            
+            // Re-trigger rig state update using the newly evaluated baseline
+            updateRigSimulationState();
+        }
+
+        function calculateManualDatasetMatrix() {
+            let graph1DisplacementSets = { room: [], ice: [], steam: [] };
+            let labelsArray = [];
+
+            for (let i = 1; i <= 3; i++) {
+                let r3Label = document.getElementById(`t2-r3-label-${i}`).value || `${i+1} Ω`;
+                labelsArray.push(`${r3Label} Ω`);
+
+                let roomVal = parseFloat(document.getElementById(`t2-room-${i}`).value);
+                let iceVal = parseFloat(document.getElementById(`t2-ice-${i}`).value);
+                let steamVal = parseFloat(document.getElementById(`t2-steam-${i}`).value);
+
+                if (!isNaN(roomVal)) graph1DisplacementSets.room.push(parseFloat((roomVal - evaluatedGlobalL0).toFixed(2)));
+                if (!isNaN(iceVal)) graph1DisplacementSets.ice.push(parseFloat((iceVal - evaluatedGlobalL0).toFixed(2)));
+                if (!isNaN(steamVal)) graph1DisplacementSets.steam.push(parseFloat((steamVal - evaluatedGlobalL0).toFixed(2)));
+            }
+
+            chartInstanceDisplacement.data.labels = labelsArray;
+            chartInstanceDisplacement.data.datasets[0].data = graph1DisplacementSets.room;
+            chartInstanceDisplacement.data.datasets[1].data = graph1DisplacementSets.ice;
+            chartInstanceDisplacement.data.datasets[2].data = graph1DisplacementSets.steam;
+            chartInstanceDisplacement.update();
+
+            document.getElementById('outputResistivityRho').innerText = `${WIRE_LINEAR_RHO.toFixed(4)} Ω/cm`;
+
+            let extractMeanRtValue = (envKey) => {
+                let runningSumsArray = [];
+                for (let i = 1; i <= 3; i++) {
+                    let cellVal = parseFloat(document.getElementById(`t2-${envKey}-${i}`).value);
+                    let activeR3 = parseFloat(document.getElementById(`t2-r3-label-${i}`).value) || (i + 1);
+                    if (!isNaN(cellVal)) {
+                        runningSumsArray.push(activeR3 + 2 * WIRE_LINEAR_RHO * (evaluatedGlobalL0 - cellVal));
+                    }
+                }
+                if (runningSumsArray.length === 0) return null;
+                return runningSumsArray.reduce((acc, curr) => acc + curr, 0) / runningSumsArray.length;
+            };
+
+            let calculatedRt0 = extractMeanRtValue('ice');
+            let calculatedRtRoom = extractMeanRtValue('room');
+            let calculatedRt100 = extractMeanRtValue('steam');
+
+            // Update individual resistance displays inside the Analysis Card
+            document.getElementById('outputRes0').innerText = calculatedRt0 !== null ? `${calculatedRt0.toFixed(3)} Ω` : '-- Ω';
+            document.getElementById('outputResRoom').innerText = calculatedRtRoom !== null ? `${calculatedRtRoom.toFixed(3)} Ω` : '-- Ω';
+            document.getElementById('outputRes100').innerText = calculatedRt100 !== null ? `${calculatedRt100.toFixed(3)} Ω` : '-- Ω';
+
+            let roomTempInput = parseFloat(document.getElementById('roomTempBox').value) || 27;
+            let scatterCoordinatesArray = [];
+            
+            if (calculatedRt0 !== null)    scatterCoordinatesArray.push({ x: 0, y: parseFloat(calculatedRt0.toFixed(3)) });
+            if (calculatedRtRoom !== null) scatterCoordinatesArray.push({ x: roomTempInput, y: parseFloat(calculatedRtRoom.toFixed(3)) });
+            if (calculatedRt100 !== null)  scatterCoordinatesArray.push({ x: 100, y: parseFloat(calculatedRt100.toFixed(3)) });
+
+            chartInstanceResistanceCurve.data.datasets[0].data = scatterCoordinatesArray;
+            chartInstanceResistanceCurve.update();
+
+            if (calculatedRt0 !== null && calculatedRt100 !== null) {
+                let computedAlphaValue = (calculatedRt100 - calculatedRt0) / (calculatedRt0 * 100);
+                document.getElementById('outputAlphaCoefficient').innerText = `${computedAlphaValue.toFixed(6)} /°C`;
+                document.getElementById('equationMathematicalDisplay').innerHTML = `R\u209c = ${calculatedRt0.toFixed(3)} \u00b7 [1 + ${computedAlphaValue.toFixed(5)} \u00b7 t]`;
+            }
+        }
+
+        // ... Wire schematic canvas methods remain unchanged ...
         function drawHighVisibilityApparatusSetup(mode, r3, temp, comm) {
             canvasCtx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
             canvasCtx.fillStyle = "#0c1322";
@@ -363,7 +565,6 @@
 
             let offsetBoxY = 165;
 
-            // --- 1. HEAVY BRASS CONDUCTING BLOCK SEGMENTS ---
             canvasCtx.fillStyle = "#eab308"; 
             canvasCtx.strokeStyle = "#ffffff"; 
             canvasCtx.lineWidth = 2.5;
@@ -374,7 +575,6 @@
             canvasCtx.fillRect(525, offsetBoxY, 110, 22); canvasCtx.strokeRect(525, offsetBoxY, 110, 22);
             canvasCtx.fillRect(675, offsetBoxY, 40, 22);   canvasCtx.strokeRect(675, offsetBoxY, 40, 22);
 
-            // Terminal screw posts
             canvasCtx.fillStyle = "#1e293b";
             let terminalPostsArray = [45, 65, 125, 155, 185, 215, 275, 315, 375, 435, 475, 535, 565, 595, 625, 685, 705];
             terminalPostsArray.forEach(ptX => {
@@ -382,7 +582,6 @@
                 canvasCtx.strokeStyle = "#fff"; canvasCtx.lineWidth = 1; canvasCtx.stroke();
             });
 
-            // --- 2. SLIDE WIRE TRACK SYSTEM ---
             canvasCtx.strokeStyle = "#f97316"; canvasCtx.lineWidth = 3;
             canvasCtx.beginPath(); canvasCtx.moveTo(75, offsetBoxY + 5); canvasCtx.lineTo(675, offsetBoxY + 5); canvasCtx.stroke();
             
@@ -399,18 +598,14 @@
                 if (index % 10 === 0) canvasCtx.fillText(index, positionX - 5, offsetBoxY + 42);
             }
 
-            // --- 3. REPOSITIONED STANDARD RATIO ARMS (2nd & 3rd GAPS) ---
-            // 2nd Inner Gap (Between 115-225 block and 265-485 block) -> Connected to posts 215 and 275
-            renderComponentCabinetBox(200, offsetBoxY - 45, "1 Ω P-Standard");
+            renderComponentCabinetBox(200, offsetBoxY - 45, "1 \u03a9 P-Standard");
             wireTraceVectorPerpendicular(215, offsetBoxY + 11, 210, offsetBoxY - 29, "#38bdf8");
             wireTraceVectorPerpendicular(275, offsetBoxY + 11, 250, offsetBoxY - 29, "#38bdf8");
 
-            // 3rd Inner Gap (Between 265-485 block and 525-635 block) -> Connected to posts 475 and 535
-            renderComponentCabinetBox(465, offsetBoxY - 45, "1 Ω Q-Standard");
+            renderComponentCabinetBox(465, offsetBoxY - 45, "1 \u03a9 Q-Standard");
             wireTraceVectorPerpendicular(475, offsetBoxY + 11, 475, offsetBoxY - 29, "#38bdf8");
             wireTraceVectorPerpendicular(535, offsetBoxY + 11, 520, offsetBoxY - 29, "#38bdf8");
 
-            // --- 4. REVERSING COMMUTATOR INTERCONNECT ---
             let comCenterX = 175, comCenterY = 55;
             canvasCtx.fillStyle = "#1e293b"; canvasCtx.beginPath(); canvasCtx.arc(comCenterX, comCenterY, 24, 0, Math.PI * 2); canvasCtx.fill();
             canvasCtx.strokeStyle = "#ffffff"; canvasCtx.lineWidth = 2; canvasCtx.stroke();
@@ -433,7 +628,6 @@
             }
             canvasCtx.stroke();
 
-            // --- 5. PRIMARY DC DRIVING CELL CIRCUIT ---
             canvasCtx.fillStyle = "#1e3a8a"; canvasCtx.fillRect(40, 38, 50, 32);
             canvasCtx.strokeStyle = "#fff"; canvasCtx.lineWidth = 1.5; canvasCtx.strokeRect(40, 38, 50, 32);
             canvasCtx.fillStyle = "#ffffff"; canvasCtx.font = "bold 9px monospace"; canvasCtx.fillText("2V Cell", 46, 58);
@@ -447,7 +641,6 @@
             wireTraceVectorPerpendicular(335, 54, 705, 54, "#f59e0b"); wireTraceVectorPerpendicular(705, 54, 705, offsetBoxY, "#f59e0b");
             wireTraceVectorPerpendicular(40, 54, 15, 54, "#f59e0b");  wireTraceVectorPerpendicular(15, 54, 15, offsetBoxY, "#f59e0b"); wireTraceVectorPerpendicular(15, offsetBoxY, 45, offsetBoxY, "#f59e0b");
 
-            // --- 6. DETECTOR GALVANOMETER ($G$) ---
             let galvoX = 370, galvoY = 250;
             canvasCtx.fillStyle = "#011c12"; canvasCtx.beginPath(); canvasCtx.arc(galvoX, galvoY, 32, 0, Math.PI * 2); canvasCtx.fill();
             canvasCtx.strokeStyle = "#10b981"; canvasCtx.lineWidth = 3; canvasCtx.stroke();
@@ -464,10 +657,8 @@
             canvasCtx.fillStyle = "#34d399"; canvasCtx.font = "bold 9px monospace"; canvasCtx.fillText("0", galvoX - 3, galvoY - 14);
             canvasCtx.fillStyle = "#ffffff"; canvasCtx.font = "bold 13px sans-serif"; canvasCtx.fillText("G", galvoX - 6, galvoY + 16);
 
-            // Connect middle node D (Post 375 on the middle brass bar)
             wireTraceVectorPerpendicular(375, offsetBoxY + 11, galvoX, galvoY - 32, "#ec4899");
 
-            // Needle Sweep Deflection mapping
             let deflectionOffsetDegrees = (userSelectedJockeyCm - systemTheoreticalNullCm) * 2.8;
             deflectionOffsetDegrees = Math.max(-32, Math.min(32, deflectionOffsetDegrees));
             let needleRads = (deflectionOffsetDegrees - 90) * Math.PI / 180;
@@ -485,19 +676,16 @@
             canvasCtx.closePath(); canvasCtx.fill();
             wireTraceVectorPerpendicular(galvoX, galvoY + 32, targetJockeyWireX, offsetBoxY + 16, "#ec4899");
 
-            // --- 7. EXTERNAL SYSTEM RIGS ---
-            // Left side outer component: Resistance Box R3
             canvasCtx.fillStyle = "#3b2314"; canvasCtx.fillRect(60, 350, 75, 32);
             canvasCtx.strokeStyle = "#ffffff"; canvasCtx.lineWidth = 2; canvasCtx.strokeRect(60, 350, 75, 32);
             canvasCtx.fillStyle = "#ffffff"; canvasCtx.font = "bold 9px sans-serif"; canvasCtx.fillText("R3 Box", 72, 364);
-            canvasCtx.fillStyle = "#22d3ee"; canvasCtx.fillText(`${r3} Ω`, 108, 364);
+            canvasCtx.fillStyle = "#22d3ee"; canvasCtx.fillText(`${r3} \u03a9`, 108, 364);
 
-            // Right side outer component: Thermal Bath Vessel Box
             let tankX = 490, tankY = 245;
             canvasCtx.fillStyle = (temp <= 0) ? "#1d4ed8" : (temp >= 100) ? "#9a3412" : "#065f46";
             canvasCtx.fillRect(tankX, tankY, 130, 130);
             canvasCtx.strokeStyle = "#ffffff"; canvasCtx.lineWidth = 2; canvasCtx.strokeRect(tankX, tankY, 130, 130);
-            canvasCtx.fillStyle = "#ffffff"; canvasCtx.font = "bold 8px sans-serif"; canvasCtx.fillText(`PRT Vessel (${temp}°C)`, tankX + 8, tankY + 14);
+            canvasCtx.fillStyle = "#ffffff"; canvasCtx.font = "bold 8px sans-serif"; canvasCtx.fillText(`PRT Vessel (${temp}\u00b0C)`, tankX + 8, tankY + 14);
 
             canvasCtx.fillStyle = "rgba(15, 23, 42, 0.85)"; canvasCtx.fillRect(tankX + 45, tankY + 50, 40, 65);
             canvasCtx.strokeStyle = "#cbd5e1"; canvasCtx.lineWidth = 1.5; canvasCtx.strokeRect(tankX + 45, tankY + 50, 40, 65);
@@ -517,24 +705,21 @@
             canvasCtx.fillText("P1", nodeP1.x - 5, nodeP1.y - 6); canvasCtx.fillText("P2", nodeP2.x - 5, nodeP2.y - 6);
             canvasCtx.fillText("C1", nodeC1.x - 5, nodeC1.y - 6); canvasCtx.fillText("C2", nodeC2.x - 5, nodeC2.y - 6);
 
-            // --- 8. PRECISION TRACE INFRASTRUCTURE ROUTING TRACKS ---
-            // R3 Box Left Node -> 1st Outer Left Gap Terminal Post (X=65)
             wireTraceVectorPerpendicular(65, offsetBoxY + 11, 70, 350, "#ef4444");
-            
-            // R3 Box Right Node -> Bottom Horizontal Bus Line -> C2 Terminal Node
-            wireTraceVectorCustomBus(125, 350, nodeC2.x, nodeC2.y, 395, "#ef4444");
-
-            // CRITICAL FIX: Routed C1 down to a deeper low horizontal bus lane (Y=412) to circumvent the Galvanometer completely without overlapping
-            wireTraceVectorCustomBus(nodeC1.x, nodeC1.y, 125, offsetBoxY + 11, 412, "#ef4444");
 
             if (mode === 'short') {
-                canvasCtx.strokeStyle = "#a855f7"; canvasCtx.lineWidth = 2.5;
+                canvasCtx.strokeStyle = "#a855f7"; canvasCtx.lineWidth = 3.5;
                 canvasCtx.beginPath(); canvasCtx.moveTo(nodeP1.x, nodeP1.y); canvasCtx.lineTo(nodeP2.x, nodeP2.y); canvasCtx.stroke();
-                
+                canvasCtx.beginPath(); canvasCtx.moveTo(nodeC1.x, nodeC1.y); canvasCtx.lineTo(nodeC2.x, nodeC2.y); canvasCtx.stroke();
+
                 wireTraceVectorPerpendicular(nodeP1.x, nodeP1.y, 595, offsetBoxY + 11, "#a855f7");
                 wireTraceVectorPerpendicular(nodeP2.x, nodeP2.y, 685, offsetBoxY + 11, "#a855f7");
+                
+                wireTraceVectorCustomBus(125, 350, nodeC2.x, nodeC2.y, 395, "#ef4444");
+                wireTraceVectorCustomBus(nodeC1.x, nodeC1.y, 125, offsetBoxY + 11, 412, "#ef4444");
             } else {
-                // Active Thermal Balance Routing to Outer Right Gap Post (X=595 and X=685)
+                wireTraceVectorCustomBus(125, 350, nodeC2.x, nodeC2.y, 395, "#ef4444");
+                wireTraceVectorCustomBus(nodeC1.x, nodeC1.y, 125, offsetBoxY + 11, 412, "#ef4444");
                 wireTraceVectorCustomBus(nodeP1.x, nodeP1.y, 595, offsetBoxY + 11, 220, "#a855f7");
                 wireTraceVectorCustomBus(nodeP2.x, nodeP2.y, 685, offsetBoxY + 11, 230, "#a855f7");
             }
@@ -567,151 +752,24 @@
             canvasCtx.strokeStyle = "#fff"; canvasCtx.lineWidth = 1; canvasCtx.stroke();
         }
 
-        // --- EXPERIMENTAL REGISTRY SUB-SYSTEM ACTIONS LOGIC ---
-        function commitMeasurementRow() {
-            const currentMode = document.getElementById('runMode').value;
-            const chosenR3 = parseFloat(document.getElementById('r3ResistanceVal').value) || 0;
-            const direction = document.getElementById('commutatorDirection').value;
-
-            if (Math.abs(userSelectedJockeyCm - systemTheoreticalNullCm) > 0.05) {
-                alert("Galvanometer unbalance offset recorded! Move slider until deflection reading equals exactly 0.0 div.");
-                return;
-            }
-
-            if (currentMode === 'short') {
-                let existingRecord = table1MemoryArray.find(item => item.r3 === chosenR3);
-                if (!existingRecord) {
-                    existingRecord = { id: table1MemoryArray.length + 1, p: 1, q: 1, r3: chosenR3, m: null, n: null, l0: null };
-                    table1MemoryArray.push(existingRecord);
-                }
-                if (direction === 'direct') existingRecord.m = userSelectedJockeyCm;
-                else existingRecord.n = userSelectedJockeyCm;
-
-                if (existingRecord.m !== null && existingRecord.n !== null) {
-                    existingRecord.l0 = parseFloat(((existingRecord.m + existingRecord.n) / 2).toFixed(2));
-                }
-                refreshTable1UIElements();
-            } else {
-                if (chosenR3 < 2 || chosenR3 > 4) {
-                    alert("Acquire calibration baseline marks within bounds: R₃ = 2 Ω, 3 Ω, or 4 Ω.");
-                    return;
-                }
-
-                const currentEnvKey = document.getElementById('chamberEnv').value;
-                if (currentEnvKey === 'room') {
-                    table2MatrixStorage.room.temp = parseFloat(document.getElementById('roomTempBox').value) || 27;
-                }
-                table2MatrixStorage[currentEnvKey][chosenR3] = userSelectedJockeyCm;
-
-                refreshTable2UIElements();
-                executeAutoCalculationsAndGraphicsUpdate();
-            }
-        }
-
-        function refreshTable1UIElements() {
-            const containerBody = document.getElementById('table1DataLines');
-            containerBody.innerHTML = '';
-            let sumL0 = 0, linesCount = 0;
-
-            table1MemoryArray.forEach(row => {
-                if (row.l0 !== null) { sumL0 += row.l0; linesCount++; }
-                containerBody.innerHTML += `<tr class="border-b border-slate-800 hover:bg-slate-800/30">
-                    <td class="p-2 border-r border-slate-800 text-slate-500 font-bold">${row.id}</td>
-                    <td class="border-r border-slate-800">1</td>
-                    <td class="border-r border-slate-800">1</td>
-                    <td class="border-r border-slate-800 text-slate-200 font-bold">${row.r3}</td>
-                    <td class="border-r border-slate-800">${row.m ? row.m.toFixed(2) : '-'}</td>
-                    <td class="border-r border-slate-800">${row.n ? row.n.toFixed(2) : '-'}</td>
-                    <td class="font-bold text-yellow-400">${row.l0 ? row.l0.toFixed(2) : '-'}</td>
-                </tr>`;
-            });
-
-            if (linesCount > 0) {
-                evaluatedGlobalL0 = parseFloat((sumL0 / linesCount).toFixed(2));
-                document.getElementById('l0OutputValue').innerText = `${evaluatedGlobalL0.toFixed(2)} cm`;
-            }
-        }
-
-        function refreshTable2UIElements() {
-            const environmentsList = ['room', 'ice', 'steam'];
-            environmentsList.forEach(env => {
-                [2, 3, 4].forEach(r3Val => {
-                    const cellDataValue = table2MatrixStorage[env][r3Val];
-                    if (cellDataValue !== null) {
-                        document.querySelector(`#row-r${r3Val} .cell-${env}`).innerText = cellDataValue.toFixed(2);
-                    }
-                });
-            });
-        }
-
-        function executeAutoCalculationsAndGraphicsUpdate() {
-            let standardIntervals = [2, 3, 4];
-            let graph1DisplacementSets = { room: [], ice: [], steam: [] };
-            let activeL0 = evaluatedGlobalL0 || 50.25;
-
-            standardIntervals.forEach(val => {
-                if (table2MatrixStorage.room[val] !== null)  graph1DisplacementSets.room.push(parseFloat((table2MatrixStorage.room[val] - activeL0).toFixed(2)));
-                if (table2MatrixStorage.ice[val] !== null)   graph1DisplacementSets.ice.push(parseFloat((table2MatrixStorage.ice[val] - activeL0).toFixed(2)));
-                if (table2MatrixStorage.steam[val] !== null) graph1DisplacementSets.steam.push(parseFloat((table2MatrixStorage.steam[val] - activeL0).toFixed(2)));
-            });
-
-            chartInstanceDisplacement.data.datasets[0].data = graph1DisplacementSets.room;
-            chartInstanceDisplacement.data.datasets[1].data = graph1DisplacementSets.ice;
-            chartInstanceDisplacement.data.datasets[2].data = graph1DisplacementSets.steam;
-            chartInstanceDisplacement.update();
-
-            document.getElementById('outputResistivityRho').innerText = `${WIRE_LINEAR_RHO.toFixed(4)} Ω/cm`;
-
-            let extractMeanRtValue = (envKey) => {
-                let runningSumsArray = [];
-                standardIntervals.forEach(v => {
-                    let coordinateValueL = table2MatrixStorage[envKey][v];
-                    if (coordinateValueL !== null) {
-                        runningSumsArray.push(v + 2 * WIRE_LINEAR_RHO * (activeL0 - coordinateValueL));
-                    }
-                });
-                if (runningSumsArray.length === 0) return null;
-                return runningSumsArray.reduce((acc, curr) => acc + curr, 0) / runningSumsArray.length;
-            };
-
-            let calculatedRt0 = extractMeanRtValue('ice');
-            let calculatedRtRoom = extractMeanRtValue('room');
-            let calculatedRt100 = extractMeanRtValue('steam');
-
-            let scatterCoordinatesArray = [];
-            if (calculatedRt0 !== null)    scatterCoordinatesArray.push({ x: 0, y: parseFloat(calculatedRt0.toFixed(3)) });
-            if (calculatedRtRoom !== null) scatterCoordinatesArray.push({ x: table2MatrixStorage.room.temp, y: parseFloat(calculatedRtRoom.toFixed(3)) });
-            if (calculatedRt100 !== null)  scatterCoordinatesArray.push({ x: 100, y: parseFloat(calculatedRt100.toFixed(3)) });
-
-            chartInstanceResistanceCurve.data.datasets[0].data = scatterCoordinatesArray;
-            chartInstanceResistanceCurve.update();
-
-            if (calculatedRt0 !== null && calculatedRt100 !== null) {
-                let computedAlphaValue = (calculatedRt100 - calculatedRt0) / (calculatedRt0 * 100);
-                document.getElementById('outputAlphaCoefficient').innerText = `${computedAlphaValue.toFixed(6)} /°C`;
-                document.getElementById('equationMathematicalDisplay').innerHTML = `Rₜ = ${calculatedRt0.toFixed(3)} · [1 + ${computedAlphaValue.toFixed(5)} · t]`;
-            }
-        }
-
         function clearFullSystemReset() {
-            table1MemoryArray = [];
             evaluatedGlobalL0 = 50.25;
-            table2MatrixStorage = {
-                room:  { 2: null, 3: null, 4: null, temp: 27 },
-                ice:   { 2: null, 3: null, 4: null, temp: 0 },
-                steam: { 2: null, 3: null, 4: null, temp: 100 }
-            };
             document.getElementById('l0OutputValue').innerText = "50.25 cm (Preset)";
             document.getElementById('outputAlphaCoefficient').innerText = "-- /°C";
             document.getElementById('equationMathematicalDisplay').innerText = "Awaiting variable matrix inputs...";
-            document.getElementById('table1DataLines').innerHTML = '';
             
-            const poolsList = ['room', 'ice', 'steam'];
-            poolsList.forEach(pKey => {
-                [2, 3, 4].forEach(vKey => {
-                    document.querySelector(`#row-r${vKey} .cell-${pKey}`).innerText = "-";
-                });
+            document.getElementById('outputRes0').innerText = '-- Ω';
+            document.getElementById('outputResRoom').innerText = '-- Ω';
+            document.getElementById('outputRes100').innerText = '-- Ω';
+
+            const allInputs = document.querySelectorAll('.table-input');
+            allInputs.forEach(input => {
+                if(!input.id.includes('r3')) input.value = '';
             });
+
+            for (let i = 1; i <= 3; i++) {
+                document.getElementById(`t1-l0-${i}`).innerText = '-';
+            }
 
             chartInstanceDisplacement.data.datasets.forEach(set => set.data = []);
             chartInstanceResistanceCurve.data.datasets[0].data = [];
